@@ -24,10 +24,14 @@
 				<h1><a href="index.php">Camagru</a></h1>
 			</div>
 		</header>
-		<div id="log">
-			<input type="button" type="submit" name="connexion" value="Se connecter">
-			<input type="button" type="submit" name="register" value="S'incrire">
-		</div>
+		<form id="form1" method="POST" action="sign-in.php">
+			<div id="log">
+				<input type="text" name="login" placeholder="nom d'utilisateur">
+				<input type="password" name="password" placeholder="mot de passe">
+				<input type="submit" name="register" value="Se connecter">
+			</div>
+		</form>
+				<input type="button" type="submit" name="register" value="S'incrire">
 	<div class="gallery" style="width: 100%">
 		<?php for ($i = 0; $i < 12; $i++): ?>
 			<div class="img-nail">
