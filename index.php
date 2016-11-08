@@ -32,10 +32,6 @@
 			</div>
 		</form>
 		<form method="post" action="sign-up.php">
-			<input type="text" name="email" placeholder="email">
-			<input type="text" name="login" placeholder="nom d'utilisateur">
-			<input type="password" name="password" placeholder="mot de passe">
-			<input type="password" name="password-conf" placeholder="confirmation mot de passe">
 			<input type="submit" name="register" value="S'incrire">
 		</form>
 	<div class="gallery" style="width: 100%">
