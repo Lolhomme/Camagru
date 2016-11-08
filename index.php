@@ -24,7 +24,7 @@
 				<h1><a href="index.php">Camagru</a></h1>
 			</div>
 		</header>
-		<form id="form1" method="POST" action="sign-in.php">
+		<form id="signinForm" method="post" action="sign-in.php">
 			<div id="log">
 				<input type="text" name="login" placeholder="nom d'utilisateur">
 				<input type="password" name="password" placeholder="mot de passe">

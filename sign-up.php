@@ -12,16 +12,20 @@
         <h1><a href="sign-up.php">Inscription</a></h1>
     </div>
 </header>
-<form id="signupForm" method="post" action="sign-up.php">
-    <label class="col-xs-12">Email</label><br/>
-    <input type="text" name="email" placeholder="email"><br/>
-    <label class="col-xs-12">Utilisateur</label><br/>
-    <input type="text" name="login" placeholder="nom d'utilisateur"><br/>
-    <label class="col-xs-12">Mot de passe</label><br/>
-    <input type="password" name="password" placeholder="mot de passe"><br/>
-    <label class="col-xs-12">Confirmer mot de passe</label><br/>
-    <input type="password" name="password-conf" placeholder="mot de passe"><br/>
-    <input type="submit" name="valider" value="Valider"
+<form id="signupForm" method="post" action="index.php">
+    <div id="register">
+        <label class="col-xs-12">Email</label><br/>
+        <input type="text" name="email" placeholder="email"><br/>
+        <label class="col-xs-12">Utilisateur</label><br/>
+        <input type="text" name="login" placeholder="nom d'utilisateur"><br/>
+        <label class="col-xs-12">Mot de passe</label><br/>
+        <input type="password" name="password" placeholder="mot de passe"><br/>
+        <label class="col-xs-12">Confirmer mot de passe</label><br/>
+        <input type="password" name="password-conf" placeholder="mot de passe"><br/>
+            <form id="confirm" method="post" action="index.php">
+                <input type="submit" name="valider" value="Valider">
+            </form>
+    </div>
 </form>
 </body>
 </html>
