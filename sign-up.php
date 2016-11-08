@@ -22,9 +22,7 @@
         <input type="password" name="password" placeholder="mot de passe"><br/>
         <label class="col-xs-12">Confirmer mot de passe</label><br/>
         <input type="password" name="password-conf" placeholder="mot de passe"><br/>
-            <form id="confirm" method="post" action="index.php">
-                <input type="submit" name="valider" value="Valider">
-            </form>
+        <input type="submit" name="valider" value="Valider">
     </div>
 </form>
 </body>
