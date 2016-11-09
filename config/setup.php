@@ -8,9 +8,10 @@ function dbConnect() {
 
     try {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    } catch (PDOException $e) {
-        print "Erreur !: " . $e->getMessage() . "<br/>";
-        die();
-    }
-    return $dbh;
+
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (\PDOException $e) {
+    print 'Connection failed: '.$e->getMessage().PHP_EOL;
+    die();
 }
+return $dbh;
