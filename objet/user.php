@@ -5,9 +5,9 @@
  * Date: 11/10/16
  * Time: 2:28 PM
  */
-$user = new utilisateur;
+namespace objet;
 
-class user
+class User
 {
     private $id,
     private $username,
