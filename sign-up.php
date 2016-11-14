@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>sign-up</title>
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body
 <header>
