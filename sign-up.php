@@ -8,7 +8,7 @@
 <body>
 <header>
     <div id="logo">
-        <h1> ="sign-up.php">Inscription</h1><br/>
+        <h1 href="sign-up.php">Inscription</h1><br/>
         <p class="logo-msg">Postes tes photos dégueulasses</p>
     </div>
 </header>
