@@ -1,7 +1,5 @@
-#logo{
-    font-family: "Courier New", Courier, mono;
-    font-style: italic;
-    padding: 10% 0 0 45%;
+body{
+    background-color: #A7A6AA;
 }
 
 .container{
@@ -9,11 +7,26 @@
     margin: 0 auto;
 }
 
-#signupForm{
+#register{
     background-color: white;
+    height: auto;
+    width: 300px;
+    margin: auto;
     border: 1px solid #efefef;
-    border-radius: 1px;
-    padding: 0 0 0 45% ;
+}
+
+#logo{
+    width: 300px;
+    font-family: "Courier New", Courier, mono;
+    font-style: italic;
+}
+
+h1{
+    padding: 0 35px 0 35px;
+}
+
+#signupForm{
+   
 }
 
 /*TEST POLICE*/
