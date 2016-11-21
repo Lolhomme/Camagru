@@ -36,7 +36,7 @@
 
 <?php
 
-include 'config/setup.php';
+include '../config/setup.php';
 
 if (!empty($_POST))
 {
