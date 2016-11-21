@@ -5,7 +5,7 @@
  * Date: 10/13/16
  * Time: 3:20 PM
  */
-include 'config/setup.php';
+include '../config/setup.php';
 
 $db = dbConnect();
 echo '<pre>';

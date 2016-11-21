@@ -1,5 +1,5 @@
 body{
-    background-color: lightgrey;
+    background-color: lightsteelblue;
 }
 
 .container{
@@ -16,7 +16,7 @@ body{
     border-top: 0px;
 }
 
-#logo{
+#register #logo{
     width: 300px;
     font-family: "Courier New", Courier, mono;
     font-style: italic;
