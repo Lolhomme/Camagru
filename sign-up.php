@@ -14,19 +14,19 @@
         </div>
         <form id="signupForm" method="post" action="index.php">
             <div class="box">
-                <input type="text" name="email" placeholder="email">
+                <input type="text" name="email" placeholder="Email">
             </div>
             <div class="box">
-                <input type="text" name="login" placeholder="utilisateur">
+                <input type="text" name="login" placeholder="Utilisateur">
             </div>
             <div class="box">
-                <input type="password" name="password" placeholder="mot de passe">
+                <input type="password" name="password" placeholder="Mot de passe">
             </div>
             <div class="box">
-                <input type="password" name="password-conf" placeholder="mot de passe">
+                <input type="password" name="password-conf" placeholder="Mot de passe">
             </div>
             <div class="box">
-                <input type="submit" name="valider" value="Souriez">
+                <button type="submit" name="Valider">Souriez</button>
             </div>
         </form>
     </div>

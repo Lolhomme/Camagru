@@ -1,5 +1,5 @@
 body{
-    background-color: #A7A6AA;
+    background-color: lightgrey;
 }
 
 .container{
@@ -12,8 +12,8 @@ body{
     height: auto;
     width: 300px;
     margin: 150px auto auto;
-    padding-bottom: 100px;
-    border: 1px solid #efefef;
+    padding: 20px;
+    border-top: 0px;
 }
 
 #logo{
@@ -22,14 +22,41 @@ body{
     font-style: italic;
 }
 
-h1{
+#register #logo h1{
     padding: 0 35px 0 35px;
+    color: #0e84b5;
 }
 
-#signupForm{
-
+#register form{
+    width: 100%;
+    display: block;
 }
 
+#register form .box{
+    margin-bottom: 15px;
+    position: relative;
+}
+
+#register form .box input {
+    width: 100%;
+    height: 30px;
+}
+#register form .box button{
+    color: white;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    background-color: #0e84b5;
+    width: 50%;
+    margin: auto 25%;
+}
+#register form .box button:hover{
+    color: #0e84b5;
+    border: 1px solid #0e84b5;
+    background: white;
+    transition: 0.5s;
+}
 /*TEST POLICE*/
 
 .col-xs-12{
