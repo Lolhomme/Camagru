@@ -22,14 +22,20 @@
 	<body>
 		<header>
 			<div id="logo">
-				<h1><a href="index.php">Camagru</a></h1>
+				<h1 href="index.php">Camagru</h1>
 			</div>
 		</header>
 		<form id="signinForm" method="post" action="sign-in.php">
 			<div id="log">
-				<input type="text" name="login" placeholder="nom d'utilisateur">
-				<input type="password" name="password" placeholder="mot de passe">
-				<input type="submit" name="register" value="Se connecter">
+				<div class="box">
+					<input type="text" name="login" placeholder="nom d'utilisateur">
+				</div>
+				<div class="box">
+					<input type="password" name="password" placeholder="mot de passe">
+				</div>
+				<div class="box">
+					<input type="submit" name="register" value="Se connecter">
+				</div>
 			</div>
 		</form>
 		<form method="post" action="sign-up.php">
