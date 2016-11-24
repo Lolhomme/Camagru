@@ -3,7 +3,11 @@ html{
 }
 
 #logo{
-    width: 300px;;
+    width: auto;
     margin:0 30px;
-    padding:0 40px;
+    padding:0 35%;
+}
+
+#logo h1{
+    margin: 0 10px;
 }
