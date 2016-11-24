@@ -8,12 +8,14 @@ function dbConnect()
     global $DB_DSN, $DB_USER, $DB_PASSWORD;
 
     try {
-        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        // Error mode
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
 
- //       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (\PDOException $e) {
+    catch (PDOException $e) {
         print 'Connection failed: ' . $e->getMessage() . PHP_EOL;
         die();
     }
-    return $dbh;
+    return $db;
 }

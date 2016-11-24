@@ -7,12 +7,26 @@
  */
 namespace check;
 
-use objet\User;
+use objet\user;
 
 // utilisation objet foireurse
 
-public function validSignUp($id = null, $hash = null)
+include '../config/setup.php';
+
+
+class checkUser
 {
-    if ($id = null || $hash = null || $id < 0)
-        echo "champs obligatoires";
+    public function registerAction
+    {
+        $user = new user();
+
+        if (isset($_POST) && !empty($_POST))
+        {
+            $form_is_valid = TRUE;
+
+            $user->setUsername($_POST['username']);
+            $user->setEmail($_POST['email']);
+
+        }
+    }
 }

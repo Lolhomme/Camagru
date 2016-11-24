@@ -12,7 +12,7 @@
             <h1 href="sign-up.php">Inscription</h1>
             <p class="logo-msg">Postes tes photos dégueulasses</p>
         </div>
-        <form id="signupForm" method="post" action="index.php">
+        <form id="signupForm">
             <div class="box">
                 <input type="text" name="email" placeholder="Email">
             </div>
@@ -33,13 +33,3 @@
 </div>
 </body>
 </html>
-
-<?php
-
-include '../config/setup.php';
-
-if (!empty($_POST))
-{
-    $db = dbConnect();
-}
-?>
