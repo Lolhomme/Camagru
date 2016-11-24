@@ -1,0 +1,9 @@
+html{
+    background-color: lightsteelblue;
+}
+
+#logo{
+    width: 300px;;
+    margin:0 30px;
+    padding:0 40px;
+}
