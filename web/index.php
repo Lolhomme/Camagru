@@ -20,27 +20,36 @@
 		}*/
 	</style>
 	<body>
-		<header>
-			<div id="logo">
-				<h1 href="index.php">Camagru</h1>
+		<div class="container">
+			<div class="login">
+				<div id="logo">
+					<h1 href="index.php">Camagru</h1>
+				</div>
+				<form id="signinForm" method="post" action="sign-in.php">
+					<div id="log">
+						<div class="box">
+							<input type="text" name="login" placeholder="nom d'utilisateur">
+						</div>
+						<div class="box">
+							<input type="password" name="password" placeholder="mot de passe">
+						</div>
+						<div class="box">
+							<button type="submit" name="log-in">Se connecter</button>
+						</div>
+					</div>
+				</form>
+                <div class="sep">
+                    <div class="line"></div>
+				    <div class="or">OU</div>
+                    <div class="line"></div>
+                </div>
+                <form method="post" action="sign-up.php">
+					<div class="box">
+						<button type="submit" name="sign-up">S'inscrire</button>
+					</div>
+				</form>
 			</div>
-		</header>
-		<form id="signinForm" method="post" action="sign-in.php">
-			<div id="log">
-				<div class="box">
-					<input type="text" name="login" placeholder="nom d'utilisateur">
-				</div>
-				<div class="box">
-					<input type="password" name="password" placeholder="mot de passe">
-				</div>
-				<div class="box">
-					<input type="submit" name="register" value="Se connecter">
-				</div>
-			</div>
-		</form>
-		<form method="post" action="sign-up.php">
-			<input type="submit" name="register" value="S'incrire">
-		</form>
+		</div>
 	<div class="gallery" style="width: 100%">
 		<?php /*for ($i = 0; $i < 12; $i++): */?><!--
 			<div class="img-nail">

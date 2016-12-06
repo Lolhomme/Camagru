@@ -2,18 +2,6 @@ body{
     background-color: lightsteelblue;
 }
 
-.nav{
-    height: 50px;
-}
-
-.nav a{
-    padding: 5px 0;
-    font-family: "Courier New", Courier, mono;
-    font-size: xx-large;
-    text-decoration: none;
-    color: #004C96;
-}
-
 .container{
     width: 960px;
     margin: 0 auto;

@@ -6,9 +6,6 @@
     <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body>
-<div class="nav">
-    <a href="index.php">Camagru</a>
-</div>
 <div class="container">
     <div id="register">
         <div id="logo">
