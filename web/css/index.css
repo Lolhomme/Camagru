@@ -3,17 +3,11 @@ html{
 }
 
 .or{
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
     color: #0e84b5;
     font-family: "Courier New", Courier, mono;
     font-weight: bolder;
-}
-
-.line {
-    height: 1px;
-    margin: 7px 0;
-    background-color: #0e84b5;
 }
 
 body .container .login #logo{
@@ -26,6 +20,7 @@ body #logo h1{
     padding:0 30px;
     color: #004C96;
     font-family: "Courier New", Courier, mono;
+    font-style: italic;
 }
 
 body .container{
@@ -36,7 +31,7 @@ body .container{
 body .container .login{
     height: auto;
     width: 300px;
-    margin: 150px auto auto;
+    margin: 200px auto auto;
     padding: 20px;
     border-top: 0px;
     background-color: white;

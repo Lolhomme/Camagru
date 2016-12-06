@@ -28,24 +28,20 @@
 				<form id="signinForm" method="post" action="sign-in.php">
 					<div id="log">
 						<div class="box">
-							<input type="text" name="login" placeholder="nom d'utilisateur">
+							<input type="text" name="login" placeholder="Nom d'utilisateur">
 						</div>
 						<div class="box">
-							<input type="password" name="password" placeholder="mot de passe">
+							<input type="password" name="password" placeholder="Mot de passe">
 						</div>
 						<div class="box">
 							<button type="submit" name="log-in">Se connecter</button>
 						</div>
 					</div>
 				</form>
-                <div class="sep">
-                    <div class="line"></div>
-				    <div class="or">OU</div>
-                    <div class="line"></div>
-                </div>
+                <div class="or">OU</div>
                 <form method="post" action="sign-up.php">
 					<div class="box">
-						<button type="submit" name="sign-up">S'inscrire</button>
+						<button type="submit" name="sign-up">Inscris-toi</button>
 					</div>
 				</form>
 			</div>
