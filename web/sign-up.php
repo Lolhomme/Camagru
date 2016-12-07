@@ -20,13 +20,13 @@
                 <input type="text" name="email" placeholder="Email">
             </div>
             <div class="box">
-                <input type="text" name="login" placeholder="Utilisateur">
+                <input type="text" name="username" placeholder="Utilisateur">
             </div>
             <div class="box">
                 <input type="password" name="password" placeholder="Mot de passe">
             </div>
             <div class="box">
-                <input type="password" name="password-conf" placeholder="Mot de passe">
+                <input type="password" name="password-conf" placeholder="Confirmer le mot de passe">
             </div>
             <div class="box">
                 <button type="submit" name="Valider">Souriez</button>
@@ -36,3 +36,18 @@
 </div>
 </body>
 </html>
+
+<?php
+
+if (!isset($_POST['email']) || !isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['password-conf']))
+    {
+        echo 'Tous les champs sont obligatoires';
+        die();
+    }
+
+if ($_POST['username'] == $_POST['password'])
+{
+    echo 'Le nom d utilisateur et le mot de passe ne peuvent pas être identiques';
+    die();
+}
+?>

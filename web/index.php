@@ -41,7 +41,7 @@
                 <div class="or">OU</div>
                 <form method="post" action="sign-up.php">
 					<div class="box">
-						<button type="submit" name="sign-up">Inscris-toi</button>
+						<button type="submit" name="sign-up">S'inscrire</button>
 					</div>
 				</form>
 			</div>
