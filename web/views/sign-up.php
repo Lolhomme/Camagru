@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>sign-up</title>
-    <link rel="stylesheet" type="text/css" href="css/sign-up.css">
+    <link rel="stylesheet" type="text/css" href="../css/sign-up.css">
 </head>
 <body>
 <div class="nav">
-    <a href="index.php">Camagru</a>
+    <a href="../index.php">Camagru</a>
 </div>
 <div class="container">
     <div id="register">
@@ -36,18 +36,3 @@
 </div>
 </body>
 </html>
-
-<?php
-
-if (!isset($_POST['email']) || !isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['password-conf']))
-    {
-        echo 'Tous les champs sont obligatoires';
-        die();
-    }
-
-if ($_POST['username'] == $_POST['password'])
-{
-    echo 'Le nom d utilisateur et le mot de passe ne peuvent pas être identiques';
-    die();
-}
-?>
