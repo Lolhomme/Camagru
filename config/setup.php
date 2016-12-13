@@ -2,20 +2,26 @@
 
 include 'database.php';
 
-function dbConnect()
-{
+//function dbConnect()
+//{
 
     global $DB_DSN, $DB_USER, $DB_PASSWORD;
 
-    try {
+    /*try {
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         // Error mode
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }*/
+    $database = explode(';\n', file_get_contents('camagru.sql'));
+    foreach ($database as $request)
+    {
     }
-
-    catch (PDOException $e) {
+//}
+    /*catch (PDOException $e) {
         print 'Connection failed: ' . $e->getMessage() . PHP_EOL;
         die();
     }
+
     return $db;
-}
+}*/
+?>
