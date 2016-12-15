@@ -29,7 +29,7 @@
                 <input type="password" name="password-conf" placeholder="Confirmer le mot de passe" onchange="verifPseudo(this)">
             </div>
             <div class="box">
-                <button type="submit">Souriez</button>
+                <button type="submit" name="valider">Souriez</button>
             </div>
         </form>
     </div>
