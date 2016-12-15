@@ -5,7 +5,8 @@ include 'database.php';
     try {
         $db = new PDO($DB_DSN_SETUP, $DB_USER, $DB_PASSWORD);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
+    }
+    catch (PDOException $e) {
         print 'Connection failed: ' . $e->getMessage() . PHP_EOL;
         die();
     }

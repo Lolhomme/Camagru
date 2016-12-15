@@ -39,7 +39,7 @@
 					</div>
 				</form>
                 <div class="or">OU</div>
-                <form method="post" action="register.php">
+                <form action="views/sign-up.php">
 					<div class="box">
 						<button type="submit" name="sign-up">S'inscrire</button>
 					</div>
