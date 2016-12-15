@@ -1,9 +1,6 @@
 <?php
 
-require '../config/setup.php';
 require './views/sign-up.php';
-
-$db = dbConnect();
 
 /*if (!isset($_POST['email']) || !isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['password-conf']))
 {
