@@ -15,18 +15,18 @@
             <h1 href="sign-up.php">Inscription</h1>
             <p class="logo-msg">Postes tes photos dégueulasses</p>
         </div>
-        <form method="post" id="signupForm">
+        <form method="post" id="signupForm" onsubmit="verifForm(this)">
             <div class="box">
-                <input type="text" name="email" placeholder="Email" onblur="verifMail(this)">
+                <input type="text" name="email" placeholder="Email" onchange="verifMail(this)">
             </div>
             <div class="box">
-                <input type="text" name="username" placeholder="Utilisateur" onblur="verifPseudo(this)">
+                <input type="text" name="username" placeholder="Utilisateur" onchange="verifPseudo(this)">
             </div>
             <div class="box">
-                <input type="password" name="password" placeholder="Mot de passe">
+                <input type="password" name="password" placeholder="Mot de passe" onchange="verifPseudo(this)">
             </div>
             <div class="box">
-                <input type="password" name="password-conf" placeholder="Confirmer le mot de passe">
+                <input type="password" name="password-conf" placeholder="Confirmer le mot de passe" onchange="verifPseudo(this)">
             </div>
             <div class="box">
                 <button type="submit">Souriez</button>
@@ -36,6 +36,19 @@
 </div>
 </body>
 <script>
+    function verifForm(f)
+    {
+        var pseudoOk = verifPseudo(f.pseudo);
+        var mailOk = verifMail(f.email);
+        var passwordOk = verifPseudo(f.pseudo);
+
+        if(pseudoOk && mailOk && passwordOk)
+            return true;
+        else
+        {
+            return false;
+        }
+    }
     function surligne(champ, erreur)
     {
         if(erreur)
