@@ -2,10 +2,15 @@
 
 require_once ("dbConnect.php");
 
-error_reporting(E_ALL);
-
 if (!empty($_POST))
 {
+        $username = trim(htmlspecialchars($_POST['username']));
+        $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
+        $req->bindValue(':username', $username);
+        $req->execute();
+    if ($req->fetchColumn() > 0)
+        echo 'Nom d\'utilisateur déjà utilisé';
+
     if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
         echo 'Tous les champs sont obligatoires';
 
