@@ -1,13 +1,34 @@
+<?php
+
+require_once ("dbConnect.php");
+
+error_reporting(E_ALL);
+
+if (!empty($_POST))
+{
+    if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
+        echo 'Tous les champs sont obligatoires';
+
+    else if ($_POST['username'] == $_POST['password'])
+        echo 'Le mot de passe et le nom d\'utilisateur ne peuvent être identiques';
+
+    else if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45 || (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)) {
+        echo 'Le nom d\'utilisateur doit faire entre 5 et 45 caractères<br>';
+        echo 'Le mot de passe doit faire entre 5 et 255 caractères';
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>sign-up</title>
-    <link rel="stylesheet" type="text/css" href="../css/sign-up.css">
+    <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body>
 <div class="nav">
-    <a href="../index.php">Camagru</a>
+    <a href="index.php">Camagru</a>
 </div>
 <div class="container">
     <div id="register">
@@ -86,21 +107,3 @@
     }
 </script>
 </html>
-
-<?php
-
-//require_once '../dbConnect.php';
-/*error_reporting(E_ALL);
-
-if(!empty($_POST))
-{
-    foreach($_POST as $key=>$val)
-    {
-        if(empty($val))
-        {
-            echo 'Tous les champs sont obligatoires';
-            die();
-        }
-    }
-}*/
-?>
