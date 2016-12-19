@@ -1,13 +1,35 @@
 <?php
 
 require_once ("dbConnect.php");
+$errors  = array();
 
-if (!empty($_POST))
-{
-        $username = trim(htmlspecialchars($_POST['username']));
-        $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
-        $req->bindValue(':username', $username);
-        $req->execute();
+if (!empty($_POST)) {
+    $username = trim(htmlspecialchars($_POST['username']));
+    $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
+    $req->bindValue(':username', $username);
+    /*$req->execute();
+    print_r($req->fetchColumn());
+    die();*/
+
+
+   /* SCHEMA TABLEAU D'ERREURS
+   if (username exist)
+        $errors['alreadyExists'] = true;
+    if (password not match)
+        $errors['passNotMatch'] = true;
+
+    ...
+
+    if (empty($errors))
+    {
+        cree ton entree bdd
+    }
+    else
+    {
+        display errors;
+    }*/
+
+
     if ($req->fetchColumn() > 0)
         echo 'Nom d\'utilisateur déjà utilisé';
 
@@ -21,6 +43,10 @@ if (!empty($_POST))
         echo 'Le nom d\'utilisateur doit faire entre 5 et 45 caractères<br>';
         echo 'Le mot de passe doit faire entre 5 et 255 caractères';
     }
+    $req = $db->prepare("INSERT INTO users (username) VALUES (:username)");
+    $user = array(':username' => $username);
+    if ($req->execute($user))
+        echo 'good';
 }
 ?>
 
