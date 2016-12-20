@@ -8,11 +8,18 @@ if (!empty($_POST)) {
     $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
     $req->bindValue(':username', $username);
     $req->execute();
+
+    $mail = htmlspecialchars($_POST['email']);
+    $req = $db->prepare("SELECT COUNT(*) FROM users WHERE mail=:mail");
+    $req->bindValue(':mail', $mail);
+    $req->execute();
     /*print_r($req->fetchColumn());
     die();*/
 
     if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
         $errors['emptyField'] = true;
+    if ($req->fetchColumn() > 0)
+        $errors['emailExist'] = true;
     if ($req->fetchColumn() > 0)
         $errors['usernameExist'] = true;
     if ($_POST['username'] == $_POST['password'])
@@ -24,15 +31,12 @@ if (!empty($_POST)) {
 
     if (empty($errors))
     {
-        $req = $db->prepare("INSERT INTO users (username) VALUES (:username)");
-        $user = array(':username' => $username);
+        $req = $db->prepare("INSERT INTO users (username, mail) VALUES (:username, :mail)");
+        $user = array(':username' => $username,
+                      ':mail' => $mail);
         if ($req->execute($user))
             echo 'good';
     }
-//    else
-//    {
-//        print_r($errors);
-//    }
 }
 ?>
 <!DOCTYPE html>
@@ -61,7 +65,12 @@ if (!empty($_POST)) {
                     echo '<h5>Le nom d\'utilisateur et le mot de passe ne peuvent être identiques</h5>'?>
             </div>
             <div class="box">
-                <input type="text" name="email" placeholder="Email" onchange="verifMail(this)">
+                <div class="errors">
+                    <?php
+                    if (isset($errors['emailExist']))
+                        echo '<h5>Un autre compte utilise cet email</h5>'?>
+                </div>
+                <input type="email" name="email" placeholder="Email" onchange="verifMail(this)">
             </div>
             <div class="box">
                 <div class="errors">
