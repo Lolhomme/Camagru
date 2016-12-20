@@ -7,49 +7,34 @@ if (!empty($_POST)) {
     $username = trim(htmlspecialchars($_POST['username']));
     $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
     $req->bindValue(':username', $username);
-    /*$req->execute();
-    print_r($req->fetchColumn());
+    $req->execute();
+    /*print_r($req->fetchColumn());
     die();*/
 
-
-   /* SCHEMA TABLEAU D'ERREURS
-   if (username exist)
-        $errors['alreadyExists'] = true;
-    if (password not match)
-        $errors['passNotMatch'] = true;
-
-    ...
+    if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
+        $errors['emptyField'] = true;
+    if ($req->fetchColumn() > 0)
+        $errors['usernameExist'] = true;
+    if ($_POST['username'] == $_POST['password'])
+        $errors['sameUsernamePassword'] = true;
+    if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45)
+        $errors['invalidUsernameForm'] = true;
+    if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
+        $errors['invalidPasswordForm'] = true;
 
     if (empty($errors))
     {
-        cree ton entree bdd
+        $req = $db->prepare("INSERT INTO users (username) VALUES (:username)");
+        $user = array(':username' => $username);
+        if ($req->execute($user))
+            echo 'good';
     }
-    else
-    {
-        display errors;
-    }*/
-
-
-    if ($req->fetchColumn() > 0)
-        echo 'Nom d\'utilisateur déjà utilisé';
-
-    if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
-        echo 'Tous les champs sont obligatoires';
-
-    else if ($_POST['username'] == $_POST['password'])
-        echo 'Le mot de passe et le nom d\'utilisateur ne peuvent être identiques';
-
-    else if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45 || (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)) {
-        echo 'Le nom d\'utilisateur doit faire entre 5 et 45 caractères<br>';
-        echo 'Le mot de passe doit faire entre 5 et 255 caractères';
-    }
-    $req = $db->prepare("INSERT INTO users (username) VALUES (:username)");
-    $user = array(':username' => $username);
-    if ($req->execute($user))
-        echo 'good';
+//    else
+//    {
+//        print_r($errors);
+//    }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,13 +53,32 @@ if (!empty($_POST)) {
             <p class="logo-msg">Postes tes photos dégueulasses</p>
         </div>
         <form method="post" id="signupForm" onsubmit="verifForm(this)">
+            <div class="errors">
+                <?php
+                if (isset($errors['emptyField']))
+                    echo '<h5>Tous les champs sont obligatoires</h5>';
+                if (isset($errors['sameUsernamePassword']))
+                    echo '<h5>Le nom d\'utilisateur et le mot de passe ne peuvent être identiques</h5>'?>
+            </div>
             <div class="box">
                 <input type="text" name="email" placeholder="Email" onchange="verifMail(this)">
             </div>
             <div class="box">
+                <div class="errors">
+                <?php
+                if (isset($errors['usernameExist']))
+                    echo '<h5>Nom d\'utilisateur déjà pris</h5>';
+                if (isset($errors['invalidUsernameForm']))
+                    echo '<h5>Format invalide</h5>'?>
+                </div>
                 <input type="text" name="username" placeholder="Utilisateur" onchange="verifPseudo(this)">
             </div>
             <div class="box">
+                <div class="errors">
+                    <?php
+                    if (isset($errors['invalidPasswordForm']))
+                        echo '<h5>Format invalide</h5>'?>
+                </div>
                 <input type="password" name="password" placeholder="Mot de passe" onchange="verifPseudo(this)">
             </div>
             <div class="box">
@@ -112,6 +116,7 @@ if (!empty($_POST)) {
     function verifMail(champ)
     {
         var regex = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
+
         if(!regex.test(champ.value))
         {
             surligne(champ, true);
