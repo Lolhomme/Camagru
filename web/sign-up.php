@@ -4,18 +4,23 @@ require_once ("dbConnect.php");
 $errors  = array();
 
 if (!empty($_POST)) {
+    //User set
     $username = trim(htmlspecialchars($_POST['username']));
     $req = $db->prepare("SELECT COUNT(*) FROM users WHERE username=:username");
     $req->bindValue(':username', $username);
     $req->execute();
 
+    //Email set
     $mail = htmlspecialchars($_POST['email']);
     $req = $db->prepare("SELECT COUNT(*) FROM users WHERE mail=:mail");
     $req->bindValue(':mail', $mail);
     $req->execute();
-    /*print_r($req->fetchColumn());
-    die();*/
 
+    //Password set
+    $salt = hash("sha256", $_POST['username'].time());
+    $password = hash("sha256", $_POST['password'].$salt);
+
+    //All errors
     if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
         $errors['emptyField'] = true;
     if ($req->fetchColumn() > 0)
@@ -29,11 +34,14 @@ if (!empty($_POST)) {
     if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
         $errors['invalidPasswordForm'] = true;
 
+    //DataBase set
     if (empty($errors))
     {
-        $req = $db->prepare("INSERT INTO users (username, mail) VALUES (:username, :mail)");
+        $req = $db->prepare("INSERT INTO users (username, mail, password, salt) VALUES (:username, :mail, :password, :salt)");
         $user = array(':username' => $username,
-                      ':mail' => $mail);
+                      ':mail' => $mail,
+                      ':password' => $password,
+                      ':salt' => $salt);
         if ($req->execute($user))
             echo 'good';
     }
