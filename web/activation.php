@@ -1,5 +1,5 @@
 <?php
-require_once ("dbConnect.php");
+require_once("./includes/dbConnect.php");
 
 $login = $_GET['log'];
 $confirmKey = $_GET['confirmKey'];
@@ -18,11 +18,13 @@ if ($activate == '1')
 else
     if ($confirmKey == $confirmKeyDB && !empty($confirmKeyDB))
     {
-        echo 'Votre compte est activé';
+        //echo 'Votre compte est activé';
 
         $req = $db->prepare("UPDATE users SET activate = 1 WHERE username=:username");
         $req->bindValue(':username', $login);
         $req->execute();
+
+        header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php?success=activation');
     }
     else
         echo 'ERROR';

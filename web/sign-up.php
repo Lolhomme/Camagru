@@ -1,6 +1,6 @@
 <?php
 
-require_once ("dbConnect.php");
+require_once("./includes/dbConnect.php");
 $errors  = array();
 
 if (!empty($_POST)) {
@@ -61,10 +61,8 @@ if (!empty($_POST)) {
                       ':password' => $password,
                       ':salt' => $salt,
                       ':confirmKey' => $confirmKey);
-        if ($req->execute($user)) {
-            echo 'good';
+        if ($req->execute($user))
             mail($destinataire, $subject, $header, $message);
-        }
     }
 }
 ?>
