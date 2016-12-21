@@ -20,10 +20,6 @@
 		}*/
 	</style>
 	<body>
-	<?php echo '<pre>';
-	print_r($_SERVER);
-	die();
-?>
 		<div class="container">
 			<div class="login">
 				<div id="logo">
