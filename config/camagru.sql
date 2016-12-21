@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `camagru`.`users` (
   `password` VARCHAR(255) NULL,
   `salt` VARCHAR(255) NULL,
   `username` VARCHAR(45) NULL,
+  `confirmKey` VARCHAR(45) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `activate` INT NULL DEFAULT 0,
   `token` VARCHAR(45) NULL,

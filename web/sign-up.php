@@ -20,6 +20,24 @@ if (!empty($_POST)) {
     $salt = hash("sha256", $_POST['username'].time());
     $password = hash("sha256", $_POST['password'].$salt);
 
+    //Key confirm set
+    $confirmKey = hash("sha1", $_POST['username']);
+
+    //Confirmation mail
+    $destinataire = $_POST['email'];
+    $username = $_POST['username'];
+
+    $subject = "Activation de votre compte";
+    $header = "De Camagru tête de cul";
+    $message = 'Bonjour du gland,
+    
+    Pour activer votre compte veuillez cliquer sur le lien ci-dessous, ou le copier/coller dans votre navigateur.
+     
+     '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/activation.php?log='.urldecode($username).'$confirmKey'.urldecode($confirmKey).'
+     
+     -----------------------
+     Ceci est un email automatique, veuillez ne pas y répondre.';
+
     //All errors
     if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
         $errors['emptyField'] = true;
@@ -37,13 +55,16 @@ if (!empty($_POST)) {
     //DataBase set
     if (empty($errors))
     {
-        $req = $db->prepare("INSERT INTO users (username, mail, password, salt) VALUES (:username, :mail, :password, :salt)");
+        $req = $db->prepare("INSERT INTO users (username, mail, password, salt, confirmKey) VALUES (:username, :mail, :password, :salt, :confirmKey)");
         $user = array(':username' => $username,
                       ':mail' => $mail,
                       ':password' => $password,
-                      ':salt' => $salt);
-        if ($req->execute($user))
+                      ':salt' => $salt,
+                      ':confirmKey' => $confirmKey);
+        if ($req->execute($user)) {
             echo 'good';
+            mail($destinataire, $subject, $header, $message);
+        }
     }
 }
 ?>

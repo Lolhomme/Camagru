@@ -8,7 +8,7 @@
 	<style>
 		/*TEST AFFICHAGE IMAGES*/
 
-		/*.img-nail {
+		/*.img-nail {0
 			width: 100%;
 			float: left;
 		}
@@ -20,6 +20,10 @@
 		}*/
 	</style>
 	<body>
+	<?php echo '<pre>';
+	print_r($_SERVER);
+	die();
+?>
 		<div class="container">
 			<div class="login">
 				<div id="logo">
@@ -39,9 +43,9 @@
 					</div>
 				</form>
                 <div class="or">OU</div>
-                <form action="sign-up.php">
+                <form action="sign-up.php" method="post">
 					<div class="box">
-						<button type="submit" name="sign-up">S'inscrire</button>
+						<button type="submit">S'inscrire</button>
 					</div>
 				</form>
 			</div>
