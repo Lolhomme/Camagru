@@ -61,8 +61,10 @@ if (!empty($_POST)) {
                       ':password' => $password,
                       ':salt' => $salt,
                       ':confirmKey' => $confirmKey);
-        if ($req->execute($user))
+        if ($req->execute($user)) {
             mail($destinataire, $subject, $header, $message);
+            $success = 'Un email de confirmation vous a été envoyé.';
+        }
     }
 }
 ?>
@@ -122,6 +124,10 @@ if (!empty($_POST)) {
             </div>
             <div class="box">
                 <button type="submit" name="valider">Souriez</button>
+                <?php
+                if (isset($success))
+                    echo "<h4>$success</h4>";
+                ?>
             </div>
         </form>
     </div>
