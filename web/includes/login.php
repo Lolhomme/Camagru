@@ -1,5 +1,24 @@
 <?php
-require ("dbConnect.php");
+require_once ("dbConnect.php");
+session_start();
+
+$errors = array();
+
+if (!empty($_POST))
+{
+    $username =
+    if (empty($_POST['username']) || empty($_POST['password']))
+        $errors['emptyField'] = true;
+    if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45)
+        $errors['invalidUsernameForm'] = true;
+    if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
+        $errors['invalidPasswordForm'] = true;
+
+    if (empty($errors))
+    {
+
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +40,7 @@ require ("dbConnect.php");
                 echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
             ?>
         </div>
-        <form id="signinForm" method="post" action="../sign-in.php">
+        <form id="signinForm" method="post" action="home.php">
             <div id="log">
                 <div class="box">
                     <input type="text" name="login" placeholder="Nom d'utilisateur">
