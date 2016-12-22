@@ -18,8 +18,6 @@ if ($activate == '1')
 else
     if ($confirmKey == $confirmKeyDB && !empty($confirmKeyDB))
     {
-        //echo 'Votre compte est activé';
-
         $req = $db->prepare("UPDATE users SET activate = 1 WHERE username=:username");
         $req->bindValue(':username', $login);
         $req->execute();

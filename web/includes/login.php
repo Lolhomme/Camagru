@@ -1,4 +1,5 @@
 <?php
+
 require_once ("dbConnect.php");
 session_start();
 
@@ -6,9 +7,6 @@ $errors = array();
 
 if (!empty($_POST))
 {
-    $username = trim(htmlspecialchars($_POST['username']));
-    $salt = hash("sha256", $_POST['username'].time());
-    $password = hash("sha256", $_POST['password'].$salt);
 
     if (empty($_POST['username']) || empty($_POST['password']))
         $errors['emptyField'] = true;
@@ -19,6 +17,16 @@ if (!empty($_POST))
 
     if (empty($errors))
     {
+        $username = trim(htmlspecialchars($_POST['username']));
+
+        //Get salt from DataBase
+        $req = $db->prepare("select salt from users where username=:username");
+        $req->bindValue(':username', $username);
+        if ($req->execute() && $row = $req->fetch())
+            $salt = $row['salt'];
+
+
+        $password = hash("sha256", $_POST['password'].$salt);
         $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
         $login = array(':username' => $username,
                        ':password' => $password);
@@ -28,7 +36,7 @@ if (!empty($_POST))
         else
         {
             $_SESSION['logged'] = $username;
-           //header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
+            header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
         }
     }
 }
@@ -51,7 +59,7 @@ if (!empty($_POST))
             if (isset($_GET['success']))
                 echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
             if (isset($errors['emptyField']))
-                echo "<h4>Tous ls champs sont obligatoires.</h4>";
+                echo "<h4>Tous les champs sont obligatoires.</h4>";
             if (isset($errors['invalidLog']))
                 echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
             ?>
@@ -59,9 +67,17 @@ if (!empty($_POST))
         <form id="signinForm" method="post">
             <div id="log">
                 <div class="box">
+                    <?php
+                    if (isset($errors['invalidUsernameForm']))
+                        echo "<h4>Format invalide.</h4>"
+                    ?>
                     <input type="text" name="username" placeholder="Nom d'utilisateur">
                 </div>
                 <div class="box">
+                    <?php
+                    if (isset($errors['invalidUsernameForm']))
+                        echo "<h4>Format invalide.</h4>"
+                    ?>
                     <input type="password" name="password" placeholder="Mot de passe">
                 </div>
                 <div class="box">
