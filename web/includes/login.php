@@ -6,7 +6,10 @@ $errors = array();
 
 if (!empty($_POST))
 {
-    $username =
+    $username = trim(htmlspecialchars($_POST['username']));
+    $salt = hash("sha256", $_POST['username'].time());
+    $password = hash("sha256", $_POST['password'].$salt);
+
     if (empty($_POST['username']) || empty($_POST['password']))
         $errors['emptyField'] = true;
     if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45)
@@ -16,11 +19,20 @@ if (!empty($_POST))
 
     if (empty($errors))
     {
-
+        $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
+        $login = array(':username' => $username,
+                       ':password' => $password);
+        $req->execute($login);
+        if ($req->fetchColumn() == 0)
+            $errors['invalidLog'] = true;
+        else
+        {
+            $_SESSION['logged'] = $username;
+           //header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
+        }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,12 +50,16 @@ if (!empty($_POST))
             <?php
             if (isset($_GET['success']))
                 echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
+            if (isset($errors['emptyField']))
+                echo "<h4>Tous ls champs sont obligatoires.</h4>";
+            if (isset($errors['invalidLog']))
+                echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
             ?>
         </div>
-        <form id="signinForm" method="post" action="home.php">
+        <form id="signinForm" method="post">
             <div id="log">
                 <div class="box">
-                    <input type="text" name="login" placeholder="Nom d'utilisateur">
+                    <input type="text" name="username" placeholder="Nom d'utilisateur">
                 </div>
                 <div class="box">
                     <input type="password" name="password" placeholder="Mot de passe">
