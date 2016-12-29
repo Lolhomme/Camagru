@@ -7,6 +7,6 @@ $DB_DSN_SETUP = 'mysql:host=127.0.0.1;port=8889';
 $DB_DSN = 'mysql:dbname=camagru;host=127.0.0.1;port=8889';
 
 $DB_USER = 'root';
-$DB_PASSWORD = 'root';
+$DB_PASSWORD = '';
 
 ?>

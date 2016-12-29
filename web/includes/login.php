@@ -80,6 +80,7 @@ if (!empty($_POST))
                     ?>
                     <input type="password" name="password" placeholder="Mot de passe">
                 </div>
+                <a class="forgot" href="../forgot.php">Mot de passe oublié?</a>
                 <div class="box">
                     <button type="submit" name="log-in">Se connecter</button>
                 </div>
