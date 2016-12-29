@@ -13,6 +13,7 @@ if (!empty($_POST))
     $req2 = $db->prepare("select active from users where email=:email");
     $req2->bindValue(':email', $email);
     $req2->execute();
+
     //All errors
     if ($req->fetchColumn() == 0)
         $errors['emailDontExist'] = true;
@@ -27,11 +28,14 @@ if (!empty($_POST))
 <head>
     <meta charset="utf-8">
     <title>Camagru</title>
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
 </head>
 <style>
 </style>
 <body>
+<div class="nav">
+    <a href="index.php">Camagru</a>
+</div>
 <div class="container">
     <div class="login">
         <div id="logo">

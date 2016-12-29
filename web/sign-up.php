@@ -12,9 +12,9 @@ if (!empty($_POST)) {
 
     //Email set
     $mail = htmlspecialchars($_POST['email']);
-    $req = $db->prepare("SELECT COUNT(*) FROM users WHERE mail=:mail");
-    $req->bindValue(':mail', $mail);
-    $req->execute();
+    $req2 = $db->prepare("SELECT COUNT(*) FROM users WHERE mail=:mail");
+    $req2->bindValue(':mail', $mail);
+    $req2->execute();
 
     //Password set
     $salt = hash("sha256", $_POST['username'].time());
@@ -41,7 +41,7 @@ if (!empty($_POST)) {
     //All errors
     if (empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password-conf']))
         $errors['emptyField'] = true;
-    if ($req->fetchColumn() > 0)
+    if ($req2->fetchColumn() > 0)
         $errors['emailExist'] = true;
     if ($req->fetchColumn() > 0)
         $errors['usernameExist'] = true;
@@ -90,7 +90,7 @@ if (!empty($_POST)) {
                 <?php
                 if (isset($errors['emptyField']))
                     echo '<h5>Tous les champs sont obligatoires</h5>';
-                if (isset($errors['sameUsernamePassword']))
+                else if (isset($errors['sameUsernamePassword']))
                     echo '<h5>Le nom d\'utilisateur et le mot de passe ne peuvent être identiques</h5>'?>
             </div>
             <div class="box">
