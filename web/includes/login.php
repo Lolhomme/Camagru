@@ -58,6 +58,10 @@ if (!empty($_POST))
             <?php
             if (isset($_GET['success']))
                 echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
+            if (isset($_GET['error']))
+                echo "<h4>Lien invalide.</h4>";
+            if (isset($_GET['ok']))
+                echo "<h4>Mot de passe changé, veuillez vous connecter.</h4>";
             if (isset($errors['emptyField']))
                 echo "<h4>Tous les champs sont obligatoires.</h4>";
             if (isset($errors['invalidLog']))
