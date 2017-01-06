@@ -1,0 +1,34 @@
+body h1{
+    margin: 0 10px;
+    color: #004C96;
+    font-family: "Courier New", Courier, mono;
+    font-style: italic;
+}
+
+body .container .login{
+    height: auto;
+    width: 300px;
+    margin: 200px auto auto;
+    padding: 20px;
+    border-top: 0px;
+    background-color: white;
+}
+
+body .container .login form{
+    width: 100%;
+}
+
+body .container .login form .row .c-12 .box{
+    margin-bottom: 20px;
+    position: relative;
+}
+
+body .container .login form .row .c-12 .box input{
+    width: 100%;
+    height: 20px;
+}
+
+body .container .login form .row .forgot{
+    width: 100%;
+    margin-left: 60px;
+}

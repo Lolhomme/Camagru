@@ -28,6 +28,7 @@
             <h1 href="index.php">Camagru</h1>
         </div>
 </div>
+
 <div class="gallery" style="width: 100%">
     <?php for ($i = 0; $i < 12; $i++): ?>
 			<div class="img-nail">

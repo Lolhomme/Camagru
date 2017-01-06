@@ -47,49 +47,54 @@ if (!empty($_POST))
 <head>
     <meta charset="utf-8">
     <title>Camagru</title>
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
+<!--    <link rel="stylesheet" type="text/css" href="../css/index.css">-->
+        <link rel="stylesheet" type="text/css" href="../css/grid.css">
+        <link rel="stylesheet" type="text/css" href="../css/login.css">
+    <link media="screen"
 </head>
 <style>
 </style>
 <body>
 <div class="container">
+    <h1>Camagru</h1>
     <div class="login">
-        <div id="logo">
-            <h1 href="index.php">Camagru</h1>
-            <?php
-            if (isset($_GET['success']))
-                echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
-            if (isset($_GET['error']))
-                echo "<h4>Lien invalide.</h4>";
-            if (isset($_GET['ok']))
-                echo "<h4>Mot de passe changé, veuillez vous connecter.</h4>";
-            if (isset($errors['emptyField']))
-                echo "<h4>Tous les champs sont obligatoires.</h4>";
-            if (isset($errors['invalidLog']))
-                echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
-            ?>
+        <div class="row">
+            <div class="c-12">
+                <?php
+                if (isset($_GET['success']))
+                    echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
+                if (isset($_GET['error']))
+                    echo "<h4>Lien invalide.</h4>";
+                if (isset($_GET['ok']))
+                    echo "<h4>Mot de passe changé, veuillez vous connecter.</h4>";
+                if (isset($errors['emptyField']))
+                    echo "<h4>Tous les champs sont obligatoires.</h4>";
+                if (isset($errors['invalidLog']))
+                    echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
+                ?>
+            </div>
         </div>
         <form id="signinForm" method="post">
-            <div id="log">
-                <div class="box">
-                    <?php
-                    if (isset($errors['invalidUsernameForm']))
-                        echo "<h4>Format invalide.</h4>"
-                    ?>
-                    <input type="text" name="username" placeholder="Nom d'utilisateur">
+            <div class="row">
+                <div class="c-12">
+                        <?php
+                        if (isset($errors['invalidUsernameForm']))
+                            echo "<h4>Format invalide.</h4>"
+                        ?>
+                        <input type="text" name="username" placeholder="Nom d'utilisateur">
                 </div>
-                <div class="box">
-                    <?php
-                    if (isset($errors['invalidUsernameForm']))
-                        echo "<h4>Format invalide.</h4>"
-                    ?>
-                    <input type="password" name="password" placeholder="Mot de passe">
-                </div>
-                <a class="forgot" href="../forgot.php">Mot de passe oublié?</a>
-                <div class="box">
-                    <button type="submit" name="log-in">Se connecter</button>
-                </div>
+                        <?php
+                        if (isset($errors['invalidUsernameForm']))
+                            echo "<h4>Format invalide.</h4>"
+                        ?>
+                        <input type="password" name="password" placeholder="Mot de passe">
             </div>
+            <div class="row">
+                    <a class="forgot" href="../forgot.php">Mot de passe oublié?</a>
+            </div>
+                    <div class="box">
+                        <button type="submit" name="log-in">Se connecter</button>
+                    </div>
         </form>
         <div class="or">OU</div>
         <form action="../sign-up.php" method="post">
@@ -98,6 +103,8 @@ if (!empty($_POST))
             </div>
         </form>
     </div>
+</div>
+</div>
 </div>
 </body>
 </html>

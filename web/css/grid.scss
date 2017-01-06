@@ -1,0 +1,49 @@
+@import "compass";
+
+$columns: 12;
+$gutter: 30px;
+
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+$container-sm: 750px;
+$container-md: 970px;
+$container-lg: 1170px;
+
+*{
+  @include box-sizing(border-box);
+}
+
+.row {
+  margin: 0 $gutter * -0.5;
+  @include clearfix;
+}
+
+.container {
+  @include container-fixed;
+
+  @media (min-width: $screen-sm-min) {
+    width: $container-sm;
+  }
+  @media (min-width: $screen-md-min) {
+    width: $container-md;
+  }
+  @media (min-width: $screen-lg-min) {
+    width: $container-lg;
+  }
+}
+
+@for $i from 1 through $columns {
+  .col-xs-#{$i},
+  .col-sm-#{$i},
+  .col-md-#{$i},
+  .col-lg-#{$i} {
+  }
+
+  .col-xs-#{$i}-nogutter,
+  .col-sm-#{$i}-nogutter,
+  .col-md-#{$i}-nogutter,
+  .col-lg-#{$i}-nogutter {
+  }
+}
