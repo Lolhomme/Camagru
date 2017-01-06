@@ -31,10 +31,10 @@ if (!empty($_POST)) {
         //Password set
         $salt = hash("sha256", $_POST['username'].time());
         $password = hash("sha256", $_POST['newpassword'].$salt);
-
-        $req = $db->prepare("update users set password=:password, confirmKey=1 where confirmKey=:recover and username=:username");
+        $req = $db->prepare("update users set salt=:salt, password=:password, confirmKey=1 where confirmKey=:recover and username=:username");
         $req->bindValue(':password', $password);
         $req->bindValue(':username', $username);
+        $req->bindValue(':salt', $salt);
         $req->bindValue(':recover', $_GET['v']);
         if ($req->execute())
         {

@@ -25,12 +25,13 @@ if (!empty($_POST))
         if ($req->execute() && $row = $req->fetch())
             $salt = $row['salt'];
 
-
-        $password = hash("sha256", $_POST['password'].$salt);
+        $password = hash("sha256", $_POST['password'] .$salt);
         $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
         $login = array(':username' => $username,
                        ':password' => $password);
-        $req->execute($login);
+        $req->execute($login);/*
+        print_r($login);
+        die();*/
         if ($req->fetchColumn() == 0)
             $errors['invalidLog'] = true;
         else
