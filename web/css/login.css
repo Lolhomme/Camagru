@@ -1,6 +1,7 @@
+body{
+    background-color: lightsteelblue;
+}
 
-
-body { background-color: pink !important; }
 body h2{
     margin: 0 10px;
     color: #004C96;
