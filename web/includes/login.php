@@ -29,9 +29,7 @@ if (!empty($_POST))
         $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
         $login = array(':username' => $username,
                        ':password' => $password);
-        $req->execute($login);/*
-        print_r($login);
-        die();*/
+        $req->execute($login);
         if ($req->fetchColumn() == 0)
             $errors['invalidLog'] = true;
         else

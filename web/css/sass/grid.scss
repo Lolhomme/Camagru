@@ -1,0 +1,149 @@
+@import "compass";
+
+/*
+**  Variables
+*/
+
+$columns: 12;
+$gutter: 30px;
+
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+$container-sm: 750px;
+$container-md: 970px;
+$container-lg: 1170px;
+
+/*
+**  Mixins
+*/
+
+@mixin resp-col($suff) {
+  .col-#{$suff}-center { margin: 0 auto; float: none;}
+  //.col-#{$suff}-nogutter {padding: 0;}
+
+  @for $i from 0 through $columns {
+    @if $i != 0 {
+      .col-#{$suff}-#{$i},
+      .col-#{$suff}-#{$i}-nogutter {
+        width: $i / $columns * 100%;
+      }
+    }
+    .col-#{$suff}-push-#{$i} {left: $i / $columns * 100%;}
+    .col-#{$suff}-offset-#{$i} {margin-left: $i / $columns * 100%;}
+    .col-#{$suff}-pull-#{$i} {right: $i / $columns * 100%;}
+  }
+}
+
+@mixin container-fixed($gut: $gutter) {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left:  floor(($gut / 2));
+  padding-right: ceil(($gut / 2));
+  @extend %clearfix;
+}
+
+/*
+** Extends
+*/
+
+%col {
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding: 0 $gutter * 0.5;
+
+  //background-color: red;
+  //border: 1px solid blue;
+}
+
+%col-nogutter {
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding: 0;
+}
+
+%clearfix {
+  &::before, &::after {
+    content: "";
+    display: table;
+  }
+  &::after {
+    clear: both;
+  }
+  & {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+  }
+}
+
+/*
+**	Class
+*/
+
+* {
+  @include box-sizing(border-box);
+}
+
+.row {
+  margin: 0 $gutter * -0.5;
+  @extend %clearfix;
+}
+
+.row-nogutter {
+  margin: 0 auto;
+  @extend %clearfix;
+}
+
+.container {
+  @include container-fixed;
+
+  @media (min-width: $screen-sm-min) {
+    width: $container-sm;
+  }
+  @media (min-width: $screen-md-min) {
+    width: $container-md;
+  }
+  @media (min-width: $screen-lg-min) {
+    width: $container-lg;
+  }
+}
+
+.container-fluid {
+  @include container-fixed;
+}
+
+/*
+** Grid
+*/
+
+@include resp-col('xs');
+
+@for $i from 1 through $columns {
+  .col-xs-#{$i},
+  .col-sm-#{$i},
+  .col-md-#{$i},
+  .col-lg-#{$i} {
+    @extend %col;
+  }
+
+  .col-xs-#{$i}-nogutter,
+  .col-sm-#{$i}-nogutter,
+  .col-md-#{$i}-nogutter,
+  .col-lg-#{$i}-nogutter {
+    @extend %col-nogutter;
+  }
+}
+
+@media only screen and (min-width: $screen-sm-min) {
+  @include resp-col('sm');
+}
+
+@media only screen and (min-width: $screen-md-min) {
+  @include resp-col('md');
+}
+
+@media only screen and (min-width: $screen-lg-min) {
+  @include resp-col('lg');
+}
