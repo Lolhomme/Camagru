@@ -2,13 +2,14 @@ body{
     background-color: lightsteelblue;
 }
 
-body h2{
+body h1{
     margin: 0 10px;
     color: #004C96;
     font-family: "Courier New", Courier, mono;
     font-style: italic;
 }
 
+/*
 body .container .login{
     height: auto;
     width: 300px;
@@ -35,4 +36,4 @@ body .container .login form .row .c-12 .box input{
 body .container .login form .row .forgot{
     width: 100%;
     margin-left: 60px;
-}
+}*/

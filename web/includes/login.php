@@ -53,9 +53,8 @@ if (!empty($_POST))
 <body>
 <div class="container">
     <h1>Camagru</h1>
-    <div class="login">
         <div class="row">
-            <div class="c-12">
+            <div class="col-xs-12 col-sm-8 col-sm-push-2 confirm-div">
                 <?php
                 if (isset($_GET['success']))
                     echo "<h4>Votre compte est activé, veuillez vous connecter.</h4>";
@@ -71,36 +70,31 @@ if (!empty($_POST))
             </div>
         </div>
         <form id="signinForm" method="post">
-            <div class="row">
-                <div class="c-12">
+            <div class="row confirm-form">
                         <?php
                         if (isset($errors['invalidUsernameForm']))
                             echo "<h4>Format invalide.</h4>"
                         ?>
-                        <input type="text" name="username" placeholder="Nom d'utilisateur">
-                </div>
+                        <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur" autofocus>
                         <?php
                         if (isset($errors['invalidUsernameForm']))
                             echo "<h4>Format invalide.</h4>"
                         ?>
-                        <input type="password" name="password" placeholder="Mot de passe">
+                        <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password" placeholder="Mot de passe">
             </div>
+            <button id="button" class="login">Se connecter</button>
             <div class="row">
-                    <a class="forgot" href="../forgot.php">Mot de passe oublié?</a>
-            </div>
-                    <div class="box">
-                        <button type="submit" name="log-in">Se connecter</button>
+                <div class="col-xs-12" style="height: 20px;"></div>
+                <div class="col-xs-12 col-sm-4 col-sm-push-4">
+                    <div class="link">
+                        <a href="../forgot.php">Mot de passe oublié?</a>
                     </div>
-        </form>
-        <div class="or">OU</div>
-        <form action="../sign-up.php" method="post">
-            <div class="box">
-                <button type="submit">S'inscrire</button>
+                    <div class="link">
+                        <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien?</a>
+                    </div>
+                </div>
             </div>
         </form>
-    </div>
-</div>
-</div>
 </div>
 </body>
 </html>
