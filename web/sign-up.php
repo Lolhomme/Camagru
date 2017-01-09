@@ -73,6 +73,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <title>sign-up</title>
+<!--    <link href="css/grid.css" type="text/css" rel="stylesheet">-->
     <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body>

@@ -45,10 +45,8 @@ if (!empty($_POST))
 <head>
     <meta charset="utf-8">
     <title>Camagru</title>
-<!--    <link rel="stylesheet" type="text/css" href="../css/index.css">-->
         <link rel="stylesheet" type="text/css" href="../css/grid.css">
         <link rel="stylesheet" type="text/css" href="../css/login.css">
-    <link media="screen"
 </head>
 <style>
 </style>
