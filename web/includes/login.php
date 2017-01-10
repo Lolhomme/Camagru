@@ -68,17 +68,19 @@ if (!empty($_POST))
         <form id="signinForm" method="post">
             <div class="row confirm-form">
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur" autofocus>
+                        <div class="col-xs-12" style="height: 10px;"></div>
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password" placeholder="Mot de passe">
+                        <div class="col-xs-12" style="height: 10px;"></div>
+                        <button class="col-xs-12 col-sm-4 col-sm-push-4" class="login">Se connecter</button>
             </div>
-            <button id="button" class="login">Se connecter</button>
             <div class="row">
                 <div class="col-xs-12" style="height: 20px;"></div>
                 <div class="col-xs-12 col-sm-4 col-sm-push-4">
                     <div class="link">
-                        <a href="../forgot.php">Mot de passe oublié?</a>
+                    <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien.</a>
                     </div>
                     <div class="link">
-                        <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien.</a>
+                        <a href="../forgot.php">Mot de passe oublié?</a>
                     </div>
                 </div>
             </div>
