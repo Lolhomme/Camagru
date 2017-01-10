@@ -62,24 +62,12 @@ if (!empty($_POST))
                     echo "<h4>Lien invalide.</h4>";
                 if (isset($_GET['ok']))
                     echo "<h4>Mot de passe changé, veuillez vous connecter.</h4>";
-                if (isset($errors['emptyField']))
-                    echo "<h4>Tous les champs sont obligatoires.</h4>";
-                if (isset($errors['invalidLog']))
-                    echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
                 ?>
             </div>
         </div>
         <form id="signinForm" method="post">
             <div class="row confirm-form">
-                        <?php
-                        if (isset($errors['invalidUsernameForm']))
-                            echo "<h4>Format invalide.</h4>"
-                        ?>
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur" autofocus>
-                        <?php
-                        if (isset($errors['invalidUsernameForm']))
-                            echo "<h4>Format invalide.</h4>"
-                        ?>
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password" placeholder="Mot de passe">
             </div>
             <button id="button" class="login">Se connecter</button>
@@ -90,9 +78,23 @@ if (!empty($_POST))
                         <a href="../forgot.php">Mot de passe oublié?</a>
                     </div>
                     <div class="link">
-                        <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien?</a>
+                        <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien.</a>
                     </div>
                 </div>
+            </div>
+            <div class="row" id="errors">
+                <?php
+                echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+                if (isset($errors['emptyField']))
+                    echo "<h4>Tous les champs sont obligatoires.</h4>";
+                if (isset($errors['invalidLog']))
+                    echo "<h4>Mauvais nom d'utilisateur ou mot de passe.</h4>";
+                if (isset($errors['invalidUsernameForm']))
+                    echo "<h4>Format nom d'utilisateur invalide.</h4>";
+                if (isset($errors['invalidPasswordForm']))
+                    echo "<h4>Format mot de passe invalide.</h4>";
+                echo "</div>";
+                ?>
             </div>
         </form>
 </div>

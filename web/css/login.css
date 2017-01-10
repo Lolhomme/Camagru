@@ -9,6 +9,9 @@ body h1{
     font-style: italic;
 }
 
+body form #signinForm{
+    background-color: white;
+}
 /*
 body .container .login{
     height: auto;
