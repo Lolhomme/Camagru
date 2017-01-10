@@ -66,7 +66,7 @@ if (!empty($_POST))
             </div>
         </div>
         <form id="signinForm" method="post">
-            <div class="row confirm-form">
+            <div class="row connect-form">
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur" autofocus>
                         <div class="col-xs-12" style="height: 10px;"></div>
                         <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password" placeholder="Mot de passe">
@@ -95,7 +95,7 @@ if (!empty($_POST))
                     echo "<h4>Format nom d'utilisateur invalide.</h4>";
                 if (isset($errors['invalidPasswordForm']))
                     echo "<h4>Format mot de passe invalide.</h4>";
-                echo "</div>";
+                echo '</div>';
                 ?>
             </div>
         </form>

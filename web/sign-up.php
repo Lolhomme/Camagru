@@ -77,6 +77,57 @@ if (!empty($_POST)) {
     <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body>
+<div class="container">
+    <div class="row nav">
+        <a href="index.php">Camagru</a>
+    </div>
+    <div class="row confirm-div">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2 confirm-div">
+            <?php
+                if (isset($success))
+                    echo "<h4>$success</h4>";
+            ?>
+        </div>
+    </div>
+    <form method="post" id="signupForm">
+        <h1>Inscription</h1>
+            <div class="row register-form">
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="email" name="email" placeholder="Email" autofocus>
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur">
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password" placeholder="Mot de passe">
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="password-conf" placeholder="Confirmer le mot de passe">
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <button class="col-xs-12 col-sm-4 col-sm-push-4" type="submit" name="valider">Souriez</button>
+            </div>
+            <div class="row" id="errors">
+                <?php
+                 echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+                if (isset($errors['emptyField']))
+                    echo '<h4>Tous les champs sont obligatoires</h4>';
+                if (isset($errors['emailExist']))
+                    echo '<h4>Un autre compte utilise cet email</h4>';
+                if (isset($errors['usernameExist']))
+                    echo '<h4>Nom d\'utilisateur déjà pris</h4>';
+                if (isset($errors['invalidUsernameForm']))
+                    echo "<h4>Format nom d'utilisateur invalide.</h4>";
+                if (isset($errors['invalidPasswordForm']))
+                    echo "<h4>Format mot de passe invalide.</h4>";
+                else if (isset($errors['sameUsernamePassword']))
+                    echo '<h4>Le nom d\'utilisateur et le mot de passe ne peuvent être identiques</h4>';
+                echo '</div>';
+                ?>
+            </div>
+    </form>
+</div>
+
+
+
+
+
+<!-- OLD BUILD -->
 <div class="nav">
     <a href="index.php">Camagru</a>
 </div>
