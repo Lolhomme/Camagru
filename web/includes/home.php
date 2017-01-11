@@ -8,18 +8,22 @@
 <body>
 <div class="container">
     <h1>Camagru: Bienvenue ganache!</h1>
-    <div class="col-xs-12 col-sm-4 nav">
-        <a href="./includes/logout.php">Se deconnecter</a>
-        <a>Gallerie</a>
+
+    <div class="row nav">
+        <div class="col-xs-12 col-sm-4 nav">
+            <a href="./includes/logout.php">Se deconnecter</a>
+            <a>Gallerie</a>
+        </div>
     </div>
-    <div class="col-xs-12" style="height: 20px"></div>
-    <div id="main" class="col-xs-12 col-sm-8">
-        <video id="video"></video>
-        <canvas id="canvas"></canvas>
-        <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
-        <button id="startbutton">Prendre une photo</button>
+    <div class="row display">
+        <div class="col-xs-12 col-sm-9 main">
+<!--        <video id="video"></video>-->
+            <canvas id="canvas"></canvas>
+            <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+            <button id="startbutton">Prendre une photo</button>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-sm-push-3 side">Side</div>
     </div>
-    <div class="col-xs-12 col-sm-2 col-sm-push-2">Side</div>
 </div>
 <script type="text/javascript" src="../js/home.js"></script>
 </body>
