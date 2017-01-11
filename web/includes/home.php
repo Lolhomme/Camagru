@@ -1,40 +1,26 @@
 <!DOCTYPE html>
-<html>
 <head>
     <meta charset="utf-8">
-    <title>Camagru</title>
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Camagru-Home</title>
+    <link href="../css/grid.css" type="text/css" rel="stylesheet">
+<!--    <link href="../css/home.css" type="text/css" rel="stylesheet">-->
 </head>
-<style>
-    /*TEST AFFICHAGE IMAGES*/
-
-    .img-nail {0
-        width: 100%;
-        float: left;
-    }
-
-    @media (min-width: 760px) {
-        .img-nail {
-            width: 30%;
-        }
-    }
-</style>
 <body>
-<div class="nav">
-	<a href="./includes/logout.php">Se deconnecter</a>
-</div>
 <div class="container">
-        <div id="logo">
-            <h1 href="index.php">Camagru</h1>
-        </div>
+    <h1>Camagru: Bienvenue ganache!</h1>
+    <div class="col-xs-12 col-sm-4 nav">
+        <a href="./includes/logout.php">Se deconnecter</a>
+        <a>Gallerie</a>
+    </div>
+    <div class="col-xs-12" style="height: 20px"></div>
+    <div id="main" class="col-xs-12 col-sm-8">
+        <video id="video"></video>
+        <canvas id="canvas"></canvas>
+        <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+        <button id="startbutton">Prendre une photo</button>
+    </div>
+    <div class="col-xs-12 col-sm-2 col-sm-push-2">Side</div>
 </div>
-
-<div class="gallery" style="width: 100%">
-    <?php for ($i = 0; $i < 12; $i++): ?>
-			<div class="img-nail">
-				<img src="https://d1ra4hr810e003.cloudfront.net/media/27FB7F0C-9885-42A6-9E0C19C35242B5AC/0/D968A2D0-35B8-41C6-A94A0C5C5FCA0725/F0E9E3EC-8F99-4ED8-A40DADEAF7A011A5/dbe669e9-40be-51c9-a9a0-001b0e022be7/thul-IMG_2100.jpg" alt="cat" style="width: 100%; height: auto;">
-			</div>
-		<?php endfor;?>
-</div>
+<script type="text/javascript" src="../js/home.js"></script>
 </body>
 </html>

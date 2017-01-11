@@ -48,8 +48,6 @@ if (!empty($_POST))
         <link rel="stylesheet" type="text/css" href="../css/grid.css">
         <link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
-<style>
-</style>
 <body>
 <div class="container">
     <h1>Camagru</h1>
