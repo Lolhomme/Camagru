@@ -44,52 +44,46 @@ if (!empty($_POST)) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Camagru</title>
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <title>sign-up</title>
+    <link href="css/grid.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/forgot-recover.css">
 </head>
 <body>
-<div class="nav">
-    <a href="index.php">Camagru</a>
-</div>
 <div class="container">
-    <div class="login">
-        <div id="logo">
-            <h1 href="index.php">Camagru</h1>
-        </div>
-        <form id="ForgotPassword" method="post">
-            <div id="log">
-                <div class="errors">
-                    <?php
-                    if (isset($errors['emptyField']))
-                        echo "<h4>Tous les champs sont obligatoires.</h4>";
-                    else if (isset($errors['sameUsernamePassword']))
-                        echo "<h4>Le mot de passe et le nom d'utilisateur ne peuvent être identiques.</h4>";
-                    if (isset($errors['invalidUsernameForm']))
-                        echo "<h4>Format invalide.</h4>";
-                    ?>
-                </div>
-                <div class="box">
-                    <input type="text" name="username" placeholder="Nom d'utilisateur">
-                </div>
-                <div class="box">
-                    <div class="error">
-                        <?php
-                        if (isset($errors['invalidPasswordForm']))
-                            echo "<h4>Format invalide.</h4>";
-                        ?>
-                    </div>
-                    <input type="password" name="newpassword" placeholder="Nouveau mot de passe">
-                </div>
-                <div class="box">
-                    <button type="submit" name="change">Changer le mot de passe</button>
-                </div>
+    <div class="row nav">
+        <a href="index.php">Camagru</a>
+    </div>
+    <div class="row">
+    <div class="col-xs-12" style="height: 50px;"></div>
+    </div>
+    <form method="post" id="signupForm">
+            <div class="row forgot-form">
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="text" name="username" placeholder="Nom d'utilisateur" autofocus>
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <input class="col-xs-12 col-sm-4 col-sm-push-4" type="password" name="newpassword" placeholder="Nouveau mot de passe">
+                <div class="col-xs-12" style="height: 10px;"></div>
+                <button class="col-xs-12 col-sm-4 col-sm-push-4" type="submit" name="reset">Changer le mot de passe</button>
+            </div>
+            <div class="row" id="errors">
+                <?php
+                echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+                if (isset($errors['emptyField']))
+                    echo "<h4>Tous les champs sont obligatoires.</h4>";
+                else if (isset($errors['sameUsernamePassword']))
+                    echo "<h4>Le mot de passe et le nom d'utilisateur ne peuvent être identiques.</h4>";
+                if (isset($errors['invalidUsernameForm']))
+                    echo "<h4>Format nom d'utilisateur invalide.</h4>";
+                if (isset($errors['invalidPasswordForm']))
+                    echo "<h4>Format mot de passe invalide.</h4>";
+                echo '</div>';
+                ?>
             </div>
         </form>
     </div>
-</div>
 </body>
 </html>

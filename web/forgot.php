@@ -45,41 +45,45 @@ if (!empty($_POST)) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Camagru</title>
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <title>sign-up</title>
+    <link href="css/grid.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/forgot-recover.css">
 </head>
 <body>
-<div class="nav">
-    <a href="index.php">Camagru</a>
-</div>
 <div class="container">
-    <div class="login">
-        <div id="logo">
-            <h1 href="index.php">Camagru</h1>
+    <div class="row nav">
+        <a href="index.php">Camagru</a>
+    </div>
+    <div class="row confirm-div">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2 confirm-div">
+            <?php
+            if (isset($success))
+                echo "<h4>$success</h4>";
+            ?>
         </div>
-        <form id="ForgotPassword" method="post">
-            <div id="log">
-                <div class="box">
-                    <?php
+    </div>
+    <form method="post" id="signupForm">
+        <div class="row forgot-form">
+            <input class="col-xs-12 col-sm-4 col-sm-push-4" type="email" name="email" placeholder="Email" autofocus>
+            <div class="col-xs-12" style="height: 10px;"></div>
+            <button class="col-xs-12 col-sm-4 col-sm-push-4" type="submit" name="reset">Reset le mot de passe</button>
+        </div>
+        <div class="row" id="errors">
+            <?php
+            echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
                     if (isset($errors['emailDontExist']))
                         echo "<h4>Cet email n'est associé a aucun compte.</h4>";
                     else if (isset($errors['inactiveAccount']))
                         echo "<h4>Compte inactif ou mot de passe déjà reset.</h4>";
-                    if (isset($success))
-                        echo "<h4>$success</h4>";
-                    ?>
-                    <input type="email" name="email" placeholder="Email">
-                </div>
-                <div class="box">
-                    <button type="submit" name="reset">Reset le mot de passe</button>
-                </div>
-            </div>
-        </form>
-    </div>
+            echo '</div>';
+            ?>
+        </div>
+    </form>
 </div>
 </body>
 </html>

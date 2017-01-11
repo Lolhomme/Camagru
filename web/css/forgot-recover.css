@@ -1,0 +1,54 @@
+body{
+    background-color: lightsteelblue;
+}
+
+.nav a{
+    font-family: "Courier New", Courier, mono;
+    font-size: xx-large;
+    text-decoration: none;
+    color: #004C96;
+}
+
+.confirm-div {
+    color: blue;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+form{
+    background-color: white;
+    text-align: center;
+    padding: 0 20px;
+}
+
+input{
+    height: 30px;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px 0px;
+}
+
+button{
+    color: white;
+    height: 30px;
+    border-radius: 15px;
+    font-size: 15px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    background-color: #0e84b5;
+}
+
+button:hover{
+    color: #0e84b5;
+    border: 1px solid #0e84b5;
+    background: white;
+    transition: 0.5s;
+}
+
+#errors {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+}
