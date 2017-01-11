@@ -73,7 +73,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <title>sign-up</title>
-<!--    <link href="css/grid.css" type="text/css" rel="stylesheet">-->
+    <link href="css/grid.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
 <body>
@@ -122,118 +122,5 @@ if (!empty($_POST)) {
             </div>
     </form>
 </div>
-
-
-
-
-
-<!-- OLD BUILD -->
-<div class="nav">
-    <a href="index.php">Camagru</a>
-</div>
-<div class="container">
-    <div id="register">
-        <div id="logo">
-            <h1 href="sign-up.php">Inscription</h1>
-            <p class="logo-msg">Postes tes photos dégueulasses</p>
-        </div>
-        <form method="post" id="signupForm" onsubmit="verifForm(this)">
-            <div class="errors">
-                <?php
-                if (isset($errors['emptyField']))
-                    echo '<h5>Tous les champs sont obligatoires</h5>';
-                else if (isset($errors['sameUsernamePassword']))
-                    echo '<h5>Le nom d\'utilisateur et le mot de passe ne peuvent être identiques</h5>'?>
-            </div>
-            <div class="box">
-                <div class="errors">
-                    <?php
-                    if (isset($errors['emailExist']))
-                        echo '<h5>Un autre compte utilise cet email</h5>'?>
-                </div>
-                <input type="email" name="email" placeholder="Email" onchange="verifMail(this)">
-            </div>
-            <div class="box">
-                <div class="errors">
-                <?php
-                if (isset($errors['usernameExist']))
-                    echo '<h5>Nom d\'utilisateur déjà pris</h5>';
-                if (isset($errors['invalidUsernameForm']))
-                    echo '<h5>Format invalide</h5>'?>
-                </div>
-                <input type="text" name="username" placeholder="Utilisateur" onchange="verifPseudo(this)">
-            </div>
-            <div class="box">
-                <div class="errors">
-                    <?php
-                    if (isset($errors['invalidPasswordForm']))
-                        echo '<h5>Format invalide</h5>'?>
-                </div>
-                <input type="password" name="password" placeholder="Mot de passe" onchange="verifPseudo(this)">
-            </div>
-            <div class="box">
-                <input type="password" name="password-conf" placeholder="Confirmer le mot de passe" onchange="verifPseudo(this)">
-            </div>
-            <div class="box">
-                <button type="submit" name="valider">Souriez</button>
-                <?php
-                if (isset($success))
-                    echo "<h4>$success</h4>";
-                ?>
-            </div>
-        </form>
-    </div>
-</div>
 </body>
-<script>
-    function verifForm(f)
-    {
-        var pseudoOk = verifPseudo(f.pseudo);
-        var mailOk = verifMail(f.email);
-        var passwordOk = verifPseudo(f.pseudo);
-
-        if(pseudoOk && mailOk && passwordOk)
-            return true;
-        else
-        {
-            return false;
-        }
-    }
-    function surligne(champ, erreur)
-    {
-        if(erreur)
-            champ.style.backgroundColor = "#fba";
-        else
-            champ.style.backgroundColor = "";
-    }
-
-    function verifMail(champ)
-    {
-        var regex = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
-
-        if(!regex.test(champ.value))
-        {
-            surligne(champ, true);
-            return false;
-        }
-        else
-        {
-            surligne(champ, false);
-            return true;
-        }
-    }
-    function verifPseudo(champ)
-    {
-        if(champ.value.length < 2 || champ.value.length > 25)
-        {
-            surligne(champ, true);
-            return false;
-        }
-        else
-        {
-            surligne(champ, false);
-            return true;
-        }
-    }
-</script>
 </html>
