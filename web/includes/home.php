@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE>
+<html>
 <head>
     <meta charset="utf-8">
     <title>Camagru-Home</title>
@@ -8,7 +9,6 @@
 <body>
 <div class="container">
     <h1>Camagru: Bienvenue ganache!</h1>
-
     <div class="row nav">
         <div class="col-xs-12 col-sm-4 nav">
             <a href="./includes/logout.php">Se deconnecter</a>
@@ -27,4 +27,7 @@
 </div>
 <script type="text/javascript" src="../js/home.js"></script>
 </body>
+<!--<footer>
+    <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
+</footer>-->
 </html>
