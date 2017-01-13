@@ -21,12 +21,14 @@
             <canvas id="canvas"></canvas>
 <!--            <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">-->
             <button id="startbutton" onclick="hiddenbutton()">Prendre une photo</button>
-            <button id="savebutton" style="display: none">Sauvegarder</button>
+            <form method="post" id="savepicture">
+                <button id="savebutton" style="display: none">Sauvegarder</button>
+            </form>
         </div>
         <div class="col-xs-12 col-sm-3 col-sm-push-3 side">Side</div>
     </div>
 </div>
-<script type="text/javascript" src="../js/home.js"></script>
+<!--<script type="text/javascript" src="../js/home.js"></script>-->
 </body>
 <!--<footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
