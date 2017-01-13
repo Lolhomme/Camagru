@@ -42,4 +42,44 @@
             canvas.setAttribute('height', height);
             streaming = true;
         }
-    }, false);})();
+    }, false);
+
+    function takepicture() {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+    }
+
+    startbutton.addEventListener('click', function(ev){
+        takepicture();
+        ev.preventDefault();
+    }, false);
+
+    /*function handleFiles(input) {
+        var canvas_file = document.getElementById('canvasfile');
+        var ctx = canvas_file.getContext('2d');
+        var img = new Image();
+        var file = input.files[0];
+        var reader  = new FileReader();
+
+        img.onload = function() {
+            canvas_file.width = img.width;
+            canvas_file.height = img.height;
+            ctx.drawImage(img, 0, 0);
+        }
+        reader.onloadend = function () {
+            img.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+    }*/
+})();
+
+function hiddenbutton(){
+    var button = document.getElementById('savebutton');
+    if (button.style.display == 'none')
+        button.style.display = 'block';
+    else
+        button.style.display = 'none';
+}

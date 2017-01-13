@@ -4,23 +4,24 @@
     <meta charset="utf-8">
     <title>Camagru-Home</title>
     <link href="../css/grid.css" type="text/css" rel="stylesheet">
-<!--    <link href="../css/home.css" type="text/css" rel="stylesheet">-->
+    <link href="../css/home.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <h1>Camagru: Bienvenue ganache!</h1>
     <div class="row nav">
-        <div class="col-xs-12 col-sm-4 nav">
-            <a href="./includes/logout.php">Se deconnecter</a>
-            <a>Gallerie</a>
+        <div class="col-xs-12 col-sm-12">
+            <a id="logout" href="./includes/logout.php">Se deconnecter</a>
+            <a id="gallery">Gallerie</a>
         </div>
     </div>
     <div class="row display">
         <div class="col-xs-12 col-sm-9 main">
-<!--        <video id="video"></video>-->
+            <video id="video"></video>
             <canvas id="canvas"></canvas>
-            <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
-            <button id="startbutton">Prendre une photo</button>
+<!--            <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">-->
+            <button id="startbutton" onclick="hiddenbutton()">Prendre une photo</button>
+            <button id="savebutton" style="display: none">Sauvegarder</button>
         </div>
         <div class="col-xs-12 col-sm-3 col-sm-push-3 side">Side</div>
     </div>
