@@ -1,3 +1,24 @@
+<?php
+
+$errors = array();
+
+if (!empty($_POST))
+{
+    /*All errors*/
+    if ($_POST['base-img'] == 'none')
+        $errors['base-img'] = true;
+
+    if (empty($errors))
+    {
+       $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+       $width = 640;
+       $height = 480;
+       $filter = imagecreatetruecolor($width, $height);
+       $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);
+       imagepng($tmp_img, "../img/uploads/");
+    }
+}
+?>
 <!DOCTYPE>
 <html>
 <head>
@@ -18,17 +39,18 @@
     <div class="row display">
         <div class="col-xs-12 col-sm-9 main">
             <video id="video"></video>
+            <img src="#" id="photo" alt="photo" style="display: none">
             <canvas id="canvas"></canvas>
-<!--            <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">-->
             <button id="startbutton" onclick="hiddenbutton()">Prendre une photo</button>
-            <form method="post" id="savepicture">
-                <button id="savebutton" style="display: none">Sauvegarder</button>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" id="base-img" name="base-img" value="none">
+                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
         </div>
         <div class="col-xs-12 col-sm-3 col-sm-push-3 side">Side</div>
     </div>
 </div>
-<!--<script type="text/javascript" src="../js/home.js"></script>-->
+<script type="text/javascript" src="../js/home.js"></script>
 </body>
 <!--<footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>

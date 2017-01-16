@@ -50,30 +50,13 @@
         canvas.getContext('2d').drawImage(video, 0, 0, width, height);
         var data = canvas.toDataURL('image/png');
         photo.setAttribute('src', data);
+        document.getElementById('base-img').setAttribute('value', data);
     }
 
     startbutton.addEventListener('click', function(ev){
         takepicture();
         ev.preventDefault();
     }, false);
-
-    /*function handleFiles(input) {
-        var canvas_file = document.getElementById('canvasfile');
-        var ctx = canvas_file.getContext('2d');
-        var img = new Image();
-        var file = input.files[0];
-        var reader  = new FileReader();
-
-        img.onload = function() {
-            canvas_file.width = img.width;
-            canvas_file.height = img.height;
-            ctx.drawImage(img, 0, 0);
-        }
-        reader.onloadend = function () {
-            img.src = reader.result;
-        }
-        reader.readAsDataURL(file);
-    }*/
 })();
 
 function hiddenbutton(){
@@ -83,3 +66,45 @@ function hiddenbutton(){
     else
         button.style.display = 'none';
 }
+
+/*function getXMLHttpRequest() {
+    var xhr = null;
+    if (window.XMLHttpRequest || window.ActiveXObject) {
+        if (window.ActiveXObject) {
+            try {
+                xhr = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch(e) {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+        } else {
+            xhr = new XMLHttpRequest();
+        }
+    } else {
+        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
+        return null;
+    }
+
+    return xhr;
+}
+
+function ajaxPostImgFromWebcam(oFormElem)
+{
+    var xhr = getXMLHttpRequest();
+    xhr.open("POST", "/upload/uploadImageFromWebcam", true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var json = JSON.parse(xhr.responseText);
+            if (json['state'] == true)
+            {
+                // alert('Your file was upload with success!');
+                window.location.href = '/gallery/pic/' + json['last_insert_id'];
+            }
+            else
+                console.log(json);
+        }
+    };
+
+    xhr.send(new FormData(oFormElem));
+}*/
