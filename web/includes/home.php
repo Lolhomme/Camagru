@@ -1,7 +1,7 @@
 <?php
 
 require ('dbConnect.php');
-
+session_start();
 $errors = array();
 
 if (!empty($_POST) && isset($_SESSION['logged']))
@@ -14,25 +14,26 @@ if (!empty($_POST) && isset($_SESSION['logged']))
     if (empty($errors))
     {
         /*Creation image*/
-
        $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
        $width = 640;
        $height = 480;
+       imagesavealpha($tmp_img, true);
        /*$filter = imagecreatetruecolor($width, $height);
        $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
 
-       /*Stocker la photo dans un dossier et son adresse dans DB*/
-       $id = $db->lastInsertId();
-       $req = $db->prepare('insert into pictures (users_id) values (:id)');
-       $req->bindValue(':id', $id);
-      /* if ($req->execute()) {
-           print_r($req);
-           die();*/
-        $id = $db->lastInsertId();
-           imagesavealpha($tmp_img, true);
-           imagepng($tmp_img, './img/uploads/' . $id . '.png');
-           imagedestroy($tmp_img);
-       }
+       /*Envoi ID user et photo dans la DB*/
+       $username = $_SESSION['logged'];
+       $req = $db->prepare('select id from users where username=:username');
+       $req->bindValue(':username', $username);
+       if ($req->execute() && $row = $req->fetch())
+           $user_id = $row['id'];
+       $req = $db->prepare('insert into pictures (users_id) values (:user_id)');
+       $req->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
+       $req->execute();
+       $picture_id = $db->lastInsertId();
+       /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+       imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+       imagedestroy($tmp_img);
     }
 }
 ?>
