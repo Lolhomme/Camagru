@@ -1,5 +1,7 @@
 <?php
 
+require ('dbConnect.php');
+
 $errors = array();
 
 if (!empty($_POST) && isset($_SESSION['logged']))
@@ -19,10 +21,18 @@ if (!empty($_POST) && isset($_SESSION['logged']))
        /*$filter = imagecreatetruecolor($width, $height);
        $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
 
-       /*Stocker la photo*/
-       $id = $_SESSION['logged'];
-       imagesavealpha($tmp_img, true);
-       imagepng($tmp_img, './img/uploads/'.$id.'.png');
+       /*Stocker la photo dans un dossier et son adresse dans DB*/
+       $id = $db->lastInsertId();
+       $req = $db->prepare('insert into pictures (users_id) values (:id)');
+       $req->bindValue(':id', $id);
+      /* if ($req->execute()) {
+           print_r($req);
+           die();*/
+        $id = $db->lastInsertId();
+           imagesavealpha($tmp_img, true);
+           imagepng($tmp_img, './img/uploads/' . $id . '.png');
+           imagedestroy($tmp_img);
+       }
     }
 }
 ?>
