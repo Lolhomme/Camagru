@@ -2,20 +2,27 @@
 
 $errors = array();
 
-if (!empty($_POST))
+if (!empty($_POST) && isset($_SESSION['logged']))
 {
     /*All errors*/
+
     if ($_POST['base-img'] == 'none')
         $errors['base-img'] = true;
 
     if (empty($errors))
     {
+        /*Creation image*/
+
        $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
        $width = 640;
        $height = 480;
-       $filter = imagecreatetruecolor($width, $height);
-       $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);
-       imagepng($tmp_img, "../img/uploads/");
+       /*$filter = imagecreatetruecolor($width, $height);
+       $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
+
+       /*Stocker la photo*/
+       $id = $_SESSION['logged'];
+       imagesavealpha($tmp_img, true);
+       imagepng($tmp_img, './img/uploads/'.$id.'.png');
     }
 }
 ?>
