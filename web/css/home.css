@@ -32,3 +32,8 @@ body h1{
 .display .side{
     background-color: #004C96;
 }
+
+.display #last_photos{
+    width: 160px;
+    height: 120px;
+}

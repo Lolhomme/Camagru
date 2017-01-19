@@ -66,7 +66,6 @@ function hiddenbutton(){
     else
         button.style.display = 'none';
 }
-
 /*function getXMLHttpRequest() {
     var xhr = null;
     if (window.XMLHttpRequest || window.ActiveXObject) {

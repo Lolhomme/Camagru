@@ -1,9 +1,11 @@
 <?php
 
 require ('dbConnect.php');
-//require ('getPictures.php');
+require ('getPicture.php');
 session_start();
 $errors = array();
+
+print_r($_FILES);
 
 if (isset($_SESSION['user'])) {
 
@@ -17,19 +19,15 @@ if (isset($_SESSION['user'])) {
     if (!empty($_POST)) {
 
         /*All errors*/
-        /*if ($_POST['base-img'] == 'none')
-            $errors['base-img'] = true;*/
+        if ($_POST['base-img'] == 'none')
+            $errors['base-img'] = true;
 
         if (empty($errors)) {
 
             /*Creation image*/
             $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
-            $width = 640;
-            $height = 480;
-            $new_w = 320;
-            $new_h = 240;
-            $new_picture = imagecreatetruecolor($new_w, $new_w);
-            imagecopyresampled($new_picture, $tmp_img, 0, 0, 0, 0, $new_w, $new_h, $width, $height);
+            /*$width = 640;
+            $height = 480;*/
 
             /*Enregistre l'adresse de la photo dans la DB*/
             $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
@@ -38,8 +36,7 @@ if (isset($_SESSION['user'])) {
 
                 /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
                 $picture_id = $db->lastInsertId();
-                imagepng($new_picture, './img/uploads/' . $picture_id . '.png');
-                imagedestroy($new_picture);
+                imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
                 imagedestroy($tmp_img);
             }
         }
@@ -65,7 +62,7 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
     <div class="row display">
-        <div class="col-xs-12 col-sm-8 main">
+        <div class="col-xs-12 col-sm-8 main">s
             <video id="video"></video>
             <img src="#" id="photo" alt="photo" style="display: none">
             <canvas id="canvas"></canvas>
@@ -74,13 +71,18 @@ if (isset($_SESSION['user'])) {
                 <input type="hidden" id="base-img" name="base-img" value="none">
                 <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="max_file_size" value="1048576">
+                <input type="file" name="ext_upload" accept="image/jpeg, image/png"">
+                <button type="submit" name="upload_ext">Ganache</button>
+            </form>
         </div>
         <div class="col-xs-12 col-sm-4 col-sm-push-4 side">
             <?php if (isset($noUploads))
             echo "<h4>Aucune ganache de vous</h4>";?>
             <?php if (is_array($photos))
                 foreach ($photos as $photo) : ?>
-            <img src="../img/uploads/<?php echo $photo['id']?>.png">
+            <img id="last_photos" src="../img/uploads/<?php echo $photo['id']?>.png">
             <?php endforeach; ?>
         </div>
     </div>
