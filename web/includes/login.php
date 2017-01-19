@@ -26,12 +26,9 @@ if (!empty($_POST))
     {
 
         /*Check all*/
-        $password = hash("sha256", $_POST['password'] .$row['salt']);
-        $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
-        $login = array(':username' => $username,
-                       ':password' => $password);
-        $req->execute($login);
-        if ($req->fetchColumn() == 0)
+        $password = hash("sha256", $_POST['password'].$row['salt']);
+        if ($password != $user['password'])
+
             $errors['invalidLog'] = true;
         else
         {
