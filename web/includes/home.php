@@ -1,6 +1,7 @@
 <?php
 
 require ('dbConnect.php');
+//require ('getPictures.php');
 session_start();
 $errors = array();
 
@@ -21,19 +22,26 @@ if (!empty($_POST) && isset($_SESSION['logged']))
        /*$filter = imagecreatetruecolor($width, $height);
        $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
 
-       /*Envoi ID user et photo dans la DB*/
+       /*Enregistre l'adresse de la phot dans la DB*/
        $username = $_SESSION['logged'];
        $req = $db->prepare('select id from users where username=:username');
        $req->bindValue(':username', $username);
-       if ($req->execute() && $row = $req->fetch())
-           $user_id = $row['id'];
-       $req = $db->prepare('insert into pictures (users_id) values (:user_id)');
-       $req->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
-       $req->execute();
-       $picture_id = $db->lastInsertId();
-       /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
-       imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-       imagedestroy($tmp_img);
+       if ($req->execute() && $row = $req->fetch()) {
+           $users_id = $row['id'];
+           $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+           $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
+           if ($req->execute()) {
+               $picture_id = $db->lastInsertId();
+
+               /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+               imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+               imagedestroy($tmp_img);
+               $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+               $req->bindValue(':users_id', $users_id);
+               if ($req->execute() && $row = $req->fetchAll())
+                   $photos = $row;
+       }
+       }
     }
 }
 ?>
@@ -65,7 +73,9 @@ if (!empty($_POST) && isset($_SESSION['logged']))
                 <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
         </div>
-        <div class="col-xs-12 col-sm-3 col-sm-push-3 side">Side</div>
+        <div class="col-xs-12 col-sm-3 col-sm-push-3 side">
+            <img src="../img/uploads/<?php echo $photo?>.png">
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="../js/home.js"></script>
