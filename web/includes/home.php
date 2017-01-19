@@ -5,44 +5,46 @@ require ('dbConnect.php');
 session_start();
 $errors = array();
 
-if (!empty($_POST) && isset($_SESSION['logged']))
-{
-    $username = $_SESSION['logged'];
-    $req = $db->prepare('select id from users where username=:username');
-    $req->bindValue(':username', $username);
-    if ($req->execute() && $row = $req->fetch())
-        $users_id = $row['id'];
-    $_SESSION['id'] = $users_id;
+if (isset($_SESSION['user'])) {
+
+    /*Get photo user*/
     $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
-    $req->bindValue(':users_id', $_SESSION['id']);
+    $req->bindValue(':users_id', $_SESSION['user']['id']);
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
+    else
+        $noUploads = true;
+    if (!empty($_POST)) {
 
-    /*All errors*/
-    if ($_POST['base-img'] == 'none')
-        $errors['base-img'] = true;
+        /*All errors*/
+        /*if ($_POST['base-img'] == 'none')
+            $errors['base-img'] = true;*/
 
-    if (empty($errors))
-    {
-        /*Creation image*/
-       $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
-       $width = 640;
-       $height = 480;
-       imagesavealpha($tmp_img, true);
-       /*$filter = imagecreatetruecolor($width, $height);
-       $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
+        if (empty($errors)) {
 
-       /*Enregistre l'adresse de la phot dans la DB*/
-        $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-        $req->bindValue(':users_id', $_SESSION['id'], \PDO::PARAM_INT);
-        if ($req->execute()) {
-            $picture_id = $db->lastInsertId();
+            /*Creation image*/
+            $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+            $width = 640;
+            $height = 480;
+            $new_w = 320;
+            $new_h = 240;
+            $new_picture = imagecreatetruecolor($new_w, $new_w);
+            imagecopyresampled($new_picture, $tmp_img, 0, 0, 0, 0, $new_w, $new_h, $width, $height);
 
-               /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
-               imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-               imagedestroy($tmp_img);
-           }
+            /*Enregistre l'adresse de la photo dans la DB*/
+            $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+            $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+            if ($req->execute()) {
+
+                /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+                $picture_id = $db->lastInsertId();
+                imagepng($new_picture, './img/uploads/' . $picture_id . '.png');
+                imagedestroy($new_picture);
+                imagedestroy($tmp_img);
+            }
+        }
     }
+
 }
 ?>
 <!DOCTYPE>
@@ -63,7 +65,7 @@ if (!empty($_POST) && isset($_SESSION['logged']))
         </div>
     </div>
     <div class="row display">
-        <div class="col-xs-12 col-sm-9 main">
+        <div class="col-xs-12 col-sm-8 main">
             <video id="video"></video>
             <img src="#" id="photo" alt="photo" style="display: none">
             <canvas id="canvas"></canvas>
@@ -73,8 +75,13 @@ if (!empty($_POST) && isset($_SESSION['logged']))
                 <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
         </div>
-        <div class="col-xs-12 col-sm-3 col-sm-push-3 side">
-            <img src="../img/uploads/<?php echo $photo?>.png">
+        <div class="col-xs-12 col-sm-4 col-sm-push-4 side">
+            <?php if (isset($noUploads))
+            echo "<h4>Aucune ganache de vous</h4>";?>
+            <?php if (is_array($photos))
+                foreach ($photos as $photo) : ?>
+            <img src="../img/uploads/<?php echo $photo['id']?>.png">
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

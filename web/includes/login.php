@@ -15,27 +15,26 @@ if (!empty($_POST))
     if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
         $errors['invalidPasswordForm'] = true;
 
+    /*Get all user info*/
+    $username = trim(htmlspecialchars($_POST['username']));
+    $req = $db->prepare("select * from users where username=:username");
+    $req->bindValue(':username', $username);
+    if ($req->execute() && $row = $req->fetch())
+    $user = $row;
+
     if (empty($errors))
     {
-        $username = trim(htmlspecialchars($_POST['username']));
 
-        //Get salt from DataBase
-        $req = $db->prepare("select salt from users where username=:username");
-        $req->bindValue(':username', $username);
-        if ($req->execute() && $row = $req->fetch())
-            $salt = $row['salt'];
-
-        $password = hash("sha256", $_POST['password'] .$salt);
-        $req = $db->prepare("select * from users where username=:username and password=:password and activate = 1");
+        /*Check all*/
+        $password = hash("sha256", $_POST['password'] .$row['salt']);
+        $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
         $login = array(':username' => $username,
                        ':password' => $password);
         $req->execute($login);
-
-        if ($req->fetch() == 0)
+        if ($req->fetchColumn() == 0)
             $errors['invalidLog'] = true;
         else
         {
-            $_SESSION['logged'] = true;
             $_SESSION['user'] = $user;
             header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
         }
