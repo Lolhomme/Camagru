@@ -26,15 +26,17 @@ if (!empty($_POST))
             $salt = $row['salt'];
 
         $password = hash("sha256", $_POST['password'] .$salt);
-        $req = $db->prepare("select count(*) from users where username=:username and password=:password and activate = 1");
+        $req = $db->prepare("select * from users where username=:username and password=:password and activate = 1");
         $login = array(':username' => $username,
                        ':password' => $password);
         $req->execute($login);
-        if ($req->fetchColumn() == 0)
+
+        if ($req->fetch() == 0)
             $errors['invalidLog'] = true;
         else
         {
-            $_SESSION['logged'] = $username;
+            $_SESSION['logged'] = true;
+            $_SESSION['user'] = $user;
             header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
         }
     }

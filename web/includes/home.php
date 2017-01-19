@@ -7,8 +7,18 @@ $errors = array();
 
 if (!empty($_POST) && isset($_SESSION['logged']))
 {
-    /*All errors*/
+    $username = $_SESSION['logged'];
+    $req = $db->prepare('select id from users where username=:username');
+    $req->bindValue(':username', $username);
+    if ($req->execute() && $row = $req->fetch())
+        $users_id = $row['id'];
+    $_SESSION['id'] = $users_id;
+    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+    $req->bindValue(':users_id', $_SESSION['id']);
+    if ($req->execute() && $row = $req->fetchAll())
+        $photos = $row;
 
+    /*All errors*/
     if ($_POST['base-img'] == 'none')
         $errors['base-img'] = true;
 
@@ -23,25 +33,15 @@ if (!empty($_POST) && isset($_SESSION['logged']))
        $b = imagecopyresampled($tmp_img, $filter, 0, 0, 0, 0, $width, $height, $width, $height);*/
 
        /*Enregistre l'adresse de la phot dans la DB*/
-       $username = $_SESSION['logged'];
-       $req = $db->prepare('select id from users where username=:username');
-       $req->bindValue(':username', $username);
-       if ($req->execute() && $row = $req->fetch()) {
-           $users_id = $row['id'];
-           $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-           $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
-           if ($req->execute()) {
-               $picture_id = $db->lastInsertId();
+        $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+        $req->bindValue(':users_id', $_SESSION['id'], \PDO::PARAM_INT);
+        if ($req->execute()) {
+            $picture_id = $db->lastInsertId();
 
                /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
                imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
                imagedestroy($tmp_img);
-               $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
-               $req->bindValue(':users_id', $users_id);
-               if ($req->execute() && $row = $req->fetchAll())
-                   $photos = $row;
-       }
-       }
+           }
     }
 }
 ?>
