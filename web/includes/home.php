@@ -1,44 +1,76 @@
 <?php
 
 require ('dbConnect.php');
-require ('getPicture.php');
 session_start();
 $errors = array();
-
-print_r($_FILES);
-
 if (isset($_SESSION['user'])) {
-    if (!empty($_POST)) {
-        if (empty($errors)) {
+        if (!empty($_POST)) { /*Upload from webcam*/
+            if (empty($_FILES)) {
+                if (empty($errors)) {
 
-            /*Creation image*/
-//            $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
-            $tmp_Upl_img = imagecreatefromstring(file_get_contents($_FILES['fileToUpload']['tmp_name']));
-            /*$width = 640;
-            $height = 480;*/
+                    /*Creation image*/
+                    $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
 
-            /*Enregistre l'adresse de la photo dans la DB*/
-            $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-            $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-            if ($req->execute()) {
+                    /*$width = 640;
+                    $height = 480;*/
 
-                /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
-                $picture_id = $db->lastInsertId();
-                imagepng($tmp_Upl_img, './img/uploads' . $picture_id .'png');
-//                imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-//                imagedestroy($tmp_img);
-                imagedestroy($tmp_Upl_img);
+                    /*Enregistre l'adresse de la photo dans la DB*/
+                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                    if ($req->execute()) {
+
+                        /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+                        $picture_id = $db->lastInsertId();
+                        imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                        imagedestroy($tmp_img);
+                    }
+                }
+            }
+            else { /*Upload from hard drive*/
+                if (empty($errors)) {
+                    $tmp_Upl_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+
+                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                    if ($req->execute()) {
+                        $picture_id = $db->lastInsertId();
+                        imagepng($tmp_Upl_img, './img/uploads/' . $picture_id . '.png');
+                        imagedestroy($tmp_Upl_img);
+                    }
+                }
             }
         }
-    }
-    /*Get photo user*/
-    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
-    $req->bindValue(':users_id', $_SESSION['user']['id']);
-    if ($req->execute() && $row = $req->fetchAll())
-        $photos = $row;
-    else
-        $noUploads = true;
+
+        /*Get photo user*/
+        $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+        $req->bindValue(':users_id', $_SESSION['user']['id']);
+        if ($req->execute() && $row = $req->fetchAll())
+            $photos = $row;
+        else
+            $noUploads = true;
 }
+
+//if (isset($_SESSION['user'])) {
+//    if (!empty($_POST)) {
+//        if (empty($errors)) {
+//            $tmp_Upl_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+//
+//            $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+//            $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+//            if ($req->execute()) {
+//                $picture_id = $db->lastInsertId();
+//                imagepng($tmp_Upl_img, './img/uploads/' . $picture_id . '.png');
+//                imagedestroy($tmp_Upl_img);
+//            }
+//        }
+//    }
+//    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+//    $req->bindValue(':users_id', $_SESSION['user']['id']);
+//    if ($req->execute() && $row = $req->fetchAll())
+//        $photos = $row;
+//    else
+//        $noUploads = true;
+//}
 ?>
 <!DOCTYPE>
 <html>
@@ -63,12 +95,15 @@ if (isset($_SESSION['user'])) {
             <img src="#" id="photo" alt="photo" style="display: none">
             <canvas id="canvas" style="display: none"></canvas>
             <div id="preview" style="display: none"></div>
-            <button id="startbutton" onclick="hiddenbutton()">Prendre une photo</button>
+            <button id="startbutton">Prendre une photo</button>
             <form id="upload-area" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="base-img" name="base-img" value="none">
+                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
+            </form>
+            <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="max_file_size" value="1048576">
                 <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
-                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
+                <button type="submit" id="savebutton_UP" name="upload-ext" style="display: none">Sauvegarder</button>
             </form>
         </div>
         <div class="col-xs-12 col-sm-4 col-sm-push-4 side">

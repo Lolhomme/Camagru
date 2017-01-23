@@ -1,11 +1,13 @@
 (function() {
 
+    /*Webcam handling*/
     var streaming = false,
         video        = document.querySelector('#video'),
         cover        = document.querySelector('#cover'),
         canvas       = document.querySelector('#canvas'),
         photo        = document.querySelector('#photo'),
         startbutton  = document.querySelector('#startbutton'),
+        save         = document.querySelector('#savebutton'),
         width = 640,
         height = 480;
 
@@ -51,6 +53,8 @@
         var data = canvas.toDataURL('image/png');
         photo.setAttribute('src', data);
         document.getElementById('base-img').setAttribute('value', data);
+        canvas.style.display = 'block';
+        save.style.display = 'block';
     }
 
     startbutton.addEventListener('click', function(ev){
@@ -58,8 +62,9 @@
         ev.preventDefault();
     }, false);
 
+    /*External picture handling*/
     var preview         = document.querySelector('#preview'),
-        buttons         = document.querySelector('#buttons'),
+        saveUpl         = document.querySelector('#savebutton_UP'),
         inputFile       = document.querySelector('#input-file'),
         fileToUpload    = document.querySelector('#file-to-upload'),
         uploadArea      = document.querySelector('#upload-area');
@@ -77,21 +82,12 @@
 
         preview.appendChild(img);
         preview.style.display = 'block';
-         /*buttons.style.display = 'block';
-         inputFile.style.display = 'none';
-         fileToUpload.style.border = 'none';
-         uploadArea.style.display = 'none';*/
+        saveUpl.style.display = 'block';
+        inputFile.style.display = 'none';
+        fileToUpload.style.border = 'none';
+        uploadArea.style.display = 'none';
     };
 })();
-
-function hiddenbutton(){
-    var button = document.getElementById('savebutton');
-    if (button.style.display == 'none')
-        button.style.display = 'block';
-    else
-        button.style.display = 'none';
-}
-
 
 /*function getXMLHttpRequest() {
     var xhr = null;
