@@ -8,24 +8,12 @@ $errors = array();
 print_r($_FILES);
 
 if (isset($_SESSION['user'])) {
-
-    /*Get photo user*/
-    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
-    $req->bindValue(':users_id', $_SESSION['user']['id']);
-    if ($req->execute() && $row = $req->fetchAll())
-        $photos = $row;
-    else
-        $noUploads = true;
     if (!empty($_POST)) {
-
-        /*All errors*/
-        if ($_POST['base-img'] == 'none')
-            $errors['base-img'] = true;
-
         if (empty($errors)) {
 
             /*Creation image*/
-            $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+//            $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+            $tmp_Upl_img = imagecreatefromstring(file_get_contents($_FILES['fileToUpload']['tmp_name']));
             /*$width = 640;
             $height = 480;*/
 
@@ -36,12 +24,20 @@ if (isset($_SESSION['user'])) {
 
                 /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
                 $picture_id = $db->lastInsertId();
-                imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-                imagedestroy($tmp_img);
+                imagepng($tmp_Upl_img, './img/uploads' . $picture_id .'png');
+//                imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+//                imagedestroy($tmp_img);
+                imagedestroy($tmp_Upl_img);
             }
         }
     }
-
+    /*Get photo user*/
+    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+    $req->bindValue(':users_id', $_SESSION['user']['id']);
+    if ($req->execute() && $row = $req->fetchAll())
+        $photos = $row;
+    else
+        $noUploads = true;
 }
 ?>
 <!DOCTYPE>
@@ -62,19 +58,17 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
     <div class="row display">
-        <div class="col-xs-12 col-sm-8 main">s
+        <div class="col-xs-12 col-sm-8 main">
             <video id="video"></video>
             <img src="#" id="photo" alt="photo" style="display: none">
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas" style="display: none"></canvas>
+            <div id="preview" style="display: none"></div>
             <button id="startbutton" onclick="hiddenbutton()">Prendre une photo</button>
-            <form method="post" enctype="multipart/form-data">
+            <form id="upload-area" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="base-img" name="base-img" value="none">
-                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
-            </form>
-            <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="max_file_size" value="1048576">
-                <input type="file" name="ext_upload" accept="image/jpeg, image/png"">
-                <button type="submit" name="upload_ext">Ganache</button>
+                <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
+                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
         </div>
         <div class="col-xs-12 col-sm-4 col-sm-push-4 side">

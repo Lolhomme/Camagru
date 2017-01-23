@@ -57,6 +57,31 @@
         takepicture();
         ev.preventDefault();
     }, false);
+
+    var preview         = document.querySelector('#preview'),
+        buttons         = document.querySelector('#buttons'),
+        inputFile       = document.querySelector('#input-file'),
+        fileToUpload    = document.querySelector('#file-to-upload'),
+        uploadArea      = document.querySelector('#upload-area');
+
+    inputFile.onchange = function (e) {
+        e.preventDefault();
+
+        var file = this.files[0];
+        var url = URL.createObjectURL(file);
+        var img = new Image(640, 480);
+
+        img.src = url;
+        img.setAttribute('crossOrigin', 'anonymous');
+        img.setAttribute('id', 'image');
+
+        preview.appendChild(img);
+        preview.style.display = 'block';
+         /*buttons.style.display = 'block';
+         inputFile.style.display = 'none';
+         fileToUpload.style.border = 'none';
+         uploadArea.style.display = 'none';*/
+    };
 })();
 
 function hiddenbutton(){
@@ -66,6 +91,8 @@ function hiddenbutton(){
     else
         button.style.display = 'none';
 }
+
+
 /*function getXMLHttpRequest() {
     var xhr = null;
     if (window.XMLHttpRequest || window.ActiveXObject) {
