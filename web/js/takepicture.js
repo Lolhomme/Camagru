@@ -9,7 +9,6 @@
         startbutton  = document.querySelector('#startbutton'),
         save         = document.querySelector('#savebutton'),
         previewCam   = document.querySelector('#previewCam'),
-
         width = 640,
         height = 480;
 
@@ -37,7 +36,7 @@
         }
     );
 
-    video.addEventListener('canplay', function(ev){
+    video.addEventListener('canplay', function(ev) {
         if (!streaming) {
             height = video.videoHeight / (video.videoWidth/width);
             video.setAttribute('width', width);
@@ -66,15 +65,15 @@
 
     for (var i = 0; i <= document.getElementById('nbrFilters').value; i++) {
         if (i == 0)
-            document.getElementById('allFilters-' + i).style.borderColor = '#ff6800';
+            document.getElementById('filter' + i).style.borderColor = '#ff6800';
 
-        document.getElementById('allFilters-' + i).addEventListener('click', function () {
-            // console.log('Filter ' + this.alt);
+        document.getElementById('filter' + i).addEventListener('click', function () {
+            // console.log('filter' + this.alt);
 
             document.getElementById('calque').src = '../img/filters/' + this.alt + '.png';
             document.getElementById('filter-id').value = this.alt;
             for (var i = 0; i <= document.getElementById('nbrFilters').value; i++) {
-                var target = document.getElementById('allFilters-' + i);
+                var target = document.getElementById('filter' + i);
 
                 if (target.alt == this.alt)
                     target.style.borderColor = '#ff6800';

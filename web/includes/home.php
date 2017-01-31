@@ -72,10 +72,10 @@ if (isset($_SESSION['user'])) {
             <?php $i = 0;?>
             <?php for (;$i <= 3; $i++):?>
                 <div class="col-xs-12 filters">
-                    <img src="../img/filters/<?=$i?>.png" id="allFilters<?=$i?>" alt="<?=$i?>">
+                    <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>">
+                    <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
                 </div>
             <?php endfor;?>
-            <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
             <button id="startbutton">Prendre une photo</button>
             <form id="upload-area" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="base-img" name="base-img" value="none">
