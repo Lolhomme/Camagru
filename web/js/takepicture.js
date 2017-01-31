@@ -1,6 +1,6 @@
 (function() {
-    /*Webcam handling*/
 
+    /*Webcam handling*/
     var streaming = false,
         video        = document.querySelector('#video'),
         cover        = document.querySelector('#cover'),
@@ -8,15 +8,10 @@
         photo        = document.querySelector('#photo'),
         startbutton  = document.querySelector('#startbutton'),
         save         = document.querySelector('#savebutton'),
+        previewCam   = document.querySelector('#previewCam'),
+
         width = 640,
         height = 480;
-
-    /*External picture handling*/
-    var preview         = document.querySelector('#preview'),
-        saveUpl         = document.querySelector('#savebutton_UP'),
-        inputFile       = document.querySelector('#input-file'),
-        fileToUpload    = document.querySelector('#file-to-upload'),
-        uploadArea      = document.querySelector('#upload-area');
 
     navigator.getMedia = ( navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -60,7 +55,7 @@
         var data = canvas.toDataURL('image/png');
         photo.setAttribute('src', data);
         document.getElementById('base-img').setAttribute('value', data);
-        canvas.style.display = 'block';
+        previewCam.style.display = 'block';
         save.style.display = 'block';
     }
 
@@ -69,24 +64,23 @@
         ev.preventDefault();
     }, false);
 
-    inputFile.onchange = function (e) {
-        e.preventDefault();
+    for (var i = 0; i <= document.getElementById('nbrFilters').value; i++) {
+        if (i == 0)
+            document.getElementById('allFilters-' + i).style.borderColor = '#ff6800';
 
-        var file = this.files[0];
-        var url = URL.createObjectURL(file);
-        var img = new Image(640, 480);
+        document.getElementById('allFilters-' + i).addEventListener('click', function () {
+            // console.log('Filter ' + this.alt);
 
-        img.src = url;
-        img.setAttribute('crossOrigin', 'anonymous');
-        img.setAttribute('id', 'image');
+            document.getElementById('calque').src = '../img/filters/' + this.alt + '.png';
+            document.getElementById('filter-id').value = this.alt;
+            for (var i = 0; i <= document.getElementById('nbrFilters').value; i++) {
+                var target = document.getElementById('allFilters-' + i);
 
-        preview.appendChild(img);
-        preview.style.display = 'block';
-        saveUpl.style.display = 'block';
-        inputFile.style.display = 'none';
-        fileToUpload.style.border = 'none';
-        uploadArea.style.display = 'none';
+                if (target.alt == this.alt)
+                    target.style.borderColor = '#ff6800';
+                else
+                    target.style.borderColor = 'transparent';
+            }
+        });
     }
-
-
 })();
