@@ -1,6 +1,6 @@
 (function() {
-
     /*Webcam handling*/
+
     var streaming = false,
         video        = document.querySelector('#video'),
         cover        = document.querySelector('#cover'),
@@ -10,6 +10,13 @@
         save         = document.querySelector('#savebutton'),
         width = 640,
         height = 480;
+
+    /*External picture handling*/
+    var preview         = document.querySelector('#preview'),
+        saveUpl         = document.querySelector('#savebutton_UP'),
+        inputFile       = document.querySelector('#input-file'),
+        fileToUpload    = document.querySelector('#file-to-upload'),
+        uploadArea      = document.querySelector('#upload-area');
 
     navigator.getMedia = ( navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -62,13 +69,6 @@
         ev.preventDefault();
     }, false);
 
-    /*External picture handling*/
-    var preview         = document.querySelector('#preview'),
-        saveUpl         = document.querySelector('#savebutton_UP'),
-        inputFile       = document.querySelector('#input-file'),
-        fileToUpload    = document.querySelector('#file-to-upload'),
-        uploadArea      = document.querySelector('#upload-area');
-
     inputFile.onchange = function (e) {
         e.preventDefault();
 
@@ -86,47 +86,7 @@
         inputFile.style.display = 'none';
         fileToUpload.style.border = 'none';
         uploadArea.style.display = 'none';
-    };
-})();
-
-/*function getXMLHttpRequest() {
-    var xhr = null;
-    if (window.XMLHttpRequest || window.ActiveXObject) {
-        if (window.ActiveXObject) {
-            try {
-                xhr = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch(e) {
-                xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        } else {
-            xhr = new XMLHttpRequest();
-        }
-    } else {
-        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
-        return null;
     }
 
-    return xhr;
-}
 
-function ajaxPostImgFromWebcam(oFormElem)
-{
-    var xhr = getXMLHttpRequest();
-    xhr.open("POST", "/upload/uploadImageFromWebcam", true);
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var json = JSON.parse(xhr.responseText);
-            if (json['state'] == true)
-            {
-                // alert('Your file was upload with success!');
-                window.location.href = '/gallery/pic/' + json['last_insert_id'];
-            }
-            else
-                console.log(json);
-        }
-    };
-
-    xhr.send(new FormData(oFormElem));
-}*/
+})();
