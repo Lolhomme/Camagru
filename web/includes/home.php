@@ -6,14 +6,31 @@ if (isset($_SESSION['user'])) {
     if (!empty($_POST)) {
         if (empty($_FILES)) { /*Upload from webcam*/
             if (empty($errors)) {
+
                 /*Creation image*/
                 $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
-                /*$width = 640;
-                $height = 480;*/
+                $filter = './img/filters/' . $_POST['filterId'] . '.png';
+                $width = 640;
+                $height = 480;
+                list($filter_w, $filter_h) = getimagesize($filter);
+                $tmp_filter = imagecreatefrompng($filter);
+                $true_filter = imagecreatetruecolor($width, $height);
+                imagealphablending($true_filter, false);
+                imagesavealpha($true_filter, true);
+                imagecolortransparent($true_filter);
+                $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
+                $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
+
+                if ($a == false || $b == false)
+                    $errors['creation'] = true;
+                imagedestroy($tmp_filter);
+                imagedestroy($true_filter);
+
                 /*Enregistre l'adresse de la photo dans la DB*/
                 $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
                 $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
                 if ($req->execute()) {
+
                     /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
                     $picture_id = $db->lastInsertId();
                     imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
@@ -23,13 +40,29 @@ if (isset($_SESSION['user'])) {
         }
         else { /*Upload from hard drive*/
             if (empty($errors)) {
-                $tmp_Upl_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+                $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+                $filter = './img/filters/' . $_POST['filterId'] . '.png';
+                $width = 640;
+                $height = 480;
+                list($filter_w, $filter_h) = getimagesize($filter);
+                $tmp_filter = imagecreatefrompng($filter);
+                $true_filter = imagecreatetruecolor($width, $height);
+                imagealphablending($true_filter, false);
+                imagesavealpha($true_filter, true);
+                imagecolortransparent($true_filter);
+                $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
+                $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
+
+                if ($a == false || $b == false)
+                    $errors['creation'] = true;
+                imagedestroy($tmp_filter);
+                imagedestroy($true_filter);
                 $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
                 $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
                 if ($req->execute()) {
                     $picture_id = $db->lastInsertId();
-                    imagepng($tmp_Upl_img, './img/uploads/' . $picture_id . '.png');
-                    imagedestroy($tmp_Upl_img);
+                    imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                    imagedestroy($tmp_img);
                 }
             }
         }
@@ -65,25 +98,28 @@ if (isset($_SESSION['user'])) {
             <video id="video"></video>
             <div id="previewCam" style="display: none">
                 <img src="#" id="photo" alt="photo" style="display: none">
-                <img id="calque" src="../img/filters/0.png"/>
+                <img id="calque" src="../img/filters/1.png"/>
                 <canvas id="canvas"></canvas>
             </div>
-            <div id="preview" style="display: none"></div>
-            <div class="col-xs-12 filters">
-                <?php $i = 0;?>
-                <?php for (;$i <= 3; $i++):?>
-                    <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>">
-                <?php endfor;?>
-                <input id="nbrFilters" type="image" value="<?=$i - 1;?>">
+            <div id="preview" style="display: none">
+                <img id="calque" src="../img/filters/1.png"/>
             </div>
-            <button id="startbutton">Prendre une photo</button>
-            <form id="upload-area" method="post" enctype="multipart/form-data">
+            <div class="col-xs-12 filters">
+                <?php $i = 1;?>
+                <?php for (;$i <= 3; $i++):?>
+                    <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>" style="border: 1px solid transparent">
+                <?php endfor;?>
+                <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
+            </div>
+            <button id="startbutton" style="display: none">Prendre une photo</button>
+            <form id="formCam" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="base-img" name="base-img" value="none">
                 <input id="filter-id" type="hidden" name="filterId" value="0">
                 <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
-            <form method="post" enctype="multipart/form-data">
+            <form id="formUpl" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="max_file_size" value="1048576">
+                <input id="filter-id" type="hidden" name="filterId" value="0">
                 <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
                 <button type="submit" id="savebutton_UP" name="upload-ext" style="display: none">Sauvegarder</button>
             </form>
