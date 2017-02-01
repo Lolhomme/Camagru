@@ -41,7 +41,9 @@ if (isset($_SESSION['user'])) {
         else { /*Upload from hard drive*/
             if (empty($errors)) {
                 $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
-                $filter = './img/filters/' . $_POST['filterId'] . '.png';
+                $filter = './img/filters/' . $_POST['filterId2'] . '.png';
+               /* print_r($filter);
+                die();*/
                 $width = 640;
                 $height = 480;
                 list($filter_w, $filter_h) = getimagesize($filter);
@@ -98,11 +100,11 @@ if (isset($_SESSION['user'])) {
             <video id="video"></video>
             <div id="previewCam" style="display: none">
                 <img src="#" id="photo" alt="photo" style="display: none">
-                <img id="calque" src="../img/filters/1.png"/>
+<!--                <img id="calque" src="../img/filters/1.png" style="display: none"/>-->
                 <canvas id="canvas"></canvas>
             </div>
             <div id="preview" style="display: none">
-                <img id="calque" src="../img/filters/1.png"/>
+<!--                <img id="calque" src="../img/filters/1.png"/>-->
             </div>
             <div class="col-xs-12 filters">
                 <?php $i = 1;?>
@@ -111,15 +113,15 @@ if (isset($_SESSION['user'])) {
                 <?php endfor;?>
                 <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
             </div>
-            <button id="startbutton" style="display: none">Prendre une photo</button>
-            <form id="formCam" method="post" enctype="multipart/form-data">
+            <form id="formCam" method="post" enctype="multipart/form-data" style="display: none">
                 <input type="hidden" id="base-img" name="base-img" value="none">
                 <input id="filter-id" type="hidden" name="filterId" value="0">
+                <button id="startbutton">Prendre une photo</button>
                 <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
             </form>
-            <form id="formUpl" method="post" enctype="multipart/form-data">
+            <form id="formUpl" method="post" enctype="multipart/form-data" style="display: none">
                 <input type="hidden" name="max_file_size" value="1048576">
-                <input id="filter-id" type="hidden" name="filterId" value="0">
+                <input id="filter-id2" type="hidden" name="filterId2" value="0">
                 <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
                 <button type="submit" id="savebutton_UP" name="upload-ext" style="display: none">Sauvegarder</button>
             </form>
@@ -135,7 +137,7 @@ if (isset($_SESSION['user'])) {
     </div>
 </div>
 <script type="text/javascript" src="../js/takepicture.js"></script>
-<script type="text/javascript" src="../js/uploadpicture.js"></script>
+<!--<script type="text/javascript" src="../js/uploadpicture.js"></script>-->
 </body>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>

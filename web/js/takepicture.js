@@ -9,6 +9,7 @@
         startbutton  = document.querySelector('#startbutton'),
         save         = document.querySelector('#savebutton'),
         previewCam   = document.querySelector('#previewCam'),
+        formCam      = document.querySelector('#formcam'),
         width = 640,
         height = 480;
 
@@ -54,40 +55,56 @@
         var data = canvas.toDataURL('image/png');
         photo.setAttribute('src', data);
         document.getElementById('base-img').setAttribute('value', data);
-        previewCam.style.display = 'block';
-        save.style.display = 'block';
     }
 
     startbutton.addEventListener('click', function(ev){
         takepicture();
+        previewCam.style.display = 'block';
+        save.style.display = 'block';
+        preview.style.display = 'none';
+        formUpl.style.display = 'none';
         ev.preventDefault();
     }, false);
 
-    /*function addfilter() {
-     var photo  = canvas.getContext('2d'),
-     draw   = new Image(),
-     filter = document.getElementById('filter');
-     draw.src = '../img/filters/' + filter + '.png';
-     draw.onload =function(){
-     photo.drawImage(draw, 0, 0, width, height);
-     }
-     }*/
+    /*External picture handling */
+    var preview = document.querySelector('#preview'),
+        saveUpl = document.querySelector('#savebutton_UP'),
+        inputFile = document.querySelector('#input-file'),
+        formUpl = document.querySelector('#formUpl');
+
+        inputFile.onchange = function (e) {
+        e.preventDefault();
+
+        var file = this.files[0];
+        var url = URL.createObjectURL(file);
+        var img = new Image(640, 480);
+
+        img.src = url;
+        img.setAttribute('crossOrigin', 'anonymous');
+        img.setAttribute('id', 'image');
+
+        preview.appendChild(img);
+        preview.style.display = 'block';
+        saveUpl.style.display = 'block';
+        formCam.style.display = 'none';
+    };
 
     for (var i = 1; i <= document.getElementById('nbrFilters').value; i++) {
         if (i == 1)
             document.getElementById('filter' + i).style.borderColor = '#ff6800';
 
         document.getElementById('filter' + i).addEventListener('click', function () {
-            // console.log('filter' + this.alt);
 
             // document.getElementById('calque').src = '../img/filters/' + this.alt + '.png';
             document.getElementById('filter-id').value = this.alt;
+            document.getElementById('filter-id2').value = this.alt;
             for (var i = 1; i <= document.getElementById('nbrFilters').value; i++) {
                 var target = document.getElementById('filter' + i);
 
                 if (target.alt == this.alt) {
                     target.style.borderColor = '#ff6800';
-                    startbutton.style.display = 'block';
+                    formCam.style.display = 'block';
+                    formUpl.style.display = 'block';
                 }
                 else
                     target.style.borderColor = 'transparent';
