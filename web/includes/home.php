@@ -65,17 +65,17 @@ if (isset($_SESSION['user'])) {
             <video id="video"></video>
             <div id="previewCam" style="display: none">
                 <img src="#" id="photo" alt="photo" style="display: none">
-                <img id="calque" src="../img/filters/0.png" />
+                <img id="calque" src="../img/filters/0.png"/>
                 <canvas id="canvas"></canvas>
             </div>
             <div id="preview" style="display: none"></div>
-            <?php $i = 0;?>
-            <?php for (;$i <= 3; $i++):?>
-                <div class="col-xs-12 filters">
+            <div class="col-xs-12 filters">
+                <?php $i = 0;?>
+                <?php for (;$i <= 3; $i++):?>
                     <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>">
-                    <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
-                </div>
-            <?php endfor;?>
+                <?php endfor;?>
+                <input id="nbrFilters" type="image" value="<?=$i - 1;?>">
+            </div>
             <button id="startbutton">Prendre une photo</button>
             <form id="upload-area" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="base-img" name="base-img" value="none">
@@ -99,9 +99,9 @@ if (isset($_SESSION['user'])) {
     </div>
 </div>
 <script type="text/javascript" src="../js/takepicture.js"></script>
-<script type="text/javascript" src="../js/takepicture.js"></script>
+<script type="text/javascript" src="../js/uploadpicture.js"></script>
 </body>
-<!--<footer>
+<footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
-</footer>-->
+</footer>
 </html>

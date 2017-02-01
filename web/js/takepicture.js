@@ -63,6 +63,16 @@
         ev.preventDefault();
     }, false);
 
+    /*function addfilter() {
+     var photo  = canvas.getContext('2d'),
+     draw   = new Image(),
+     filter = document.getElementById('filter');
+     draw.src = '../img/filters/' + filter + '.png';
+     draw.onload =function(){
+     photo.drawImage(draw, 0, 0, width, height);
+     }
+     }*/
+
     for (var i = 0; i <= document.getElementById('nbrFilters').value; i++) {
         if (i == 0)
             document.getElementById('filter' + i).style.borderColor = '#ff6800';
