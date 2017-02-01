@@ -40,12 +40,10 @@ if (isset($_SESSION['user'])) {
         }
         else { /*Upload from hard drive*/
             if (empty($errors)) {
+
                 $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
                 $filter = './img/filters/' . $_POST['filterId2'] . '.png';
-               /* print_r($filter);
-                die();*/
-                $width = 640;
-                $height = 480;
+                list($width, $height) = getimagesize($_FILES['file-to-upload']['tmp_name']);
                 list($filter_w, $filter_h) = getimagesize($filter);
                 $tmp_filter = imagecreatefrompng($filter);
                 $true_filter = imagecreatetruecolor($width, $height);
