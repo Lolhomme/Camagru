@@ -44,7 +44,9 @@ if (isset($_SESSION)) {
     <div class="row allPictures">
         <div class="col-xs-12 pagination">
             <?php foreach ($photos as $photo):?>
-            <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">
+                <a href="picture.php?id=<?=$photo['id']?>">
+                    <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">
+                </a>
             <?php endforeach;?>
             <?php for ($i=1;$i<=$allPage;$i++){
                 if ($i == $cPage)
