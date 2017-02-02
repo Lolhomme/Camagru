@@ -47,7 +47,10 @@ if (isset($_SESSION)) {
             <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">
             <?php endforeach;?>
             <?php for ($i=1;$i<=$allPage;$i++){
-            echo "<a href=\"gallery.php?p=$i\">$i</a>/";
+                if ($i == $cPage)
+                    echo "$i/";
+                else
+                    echo "<a href=\"gallery.php?p=$i\">$i</a>/";
             }?>
         </div>
     </div>
