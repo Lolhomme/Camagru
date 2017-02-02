@@ -9,12 +9,15 @@ if (isset($_SESSION)) {
     $req->execute();
     $row = $req->fetchColumn();
     $nbrPerPage = 12;
-    $firstPage = 1;
-    $numPage = (($firstPage - 1) * $nbrPerPage);
     $allPage = ceil($row / $nbrPerPage);
+    if (isset($_GET['p']) && ($_GET['p']>0 && $_GET['p']<=$allPage))
+        $firstPage = $_GET['p'];
+    else
+        $firstPage = 1;
+    $cPage = (($firstPage - 1) * $nbrPerPage);
 
     /*Get all photo by datetime*/
-    $req = $db->prepare("select id from pictures ORDER BY created_at DESC LIMIT $numPage,$nbrPerPage");
+    $req = $db->prepare("select id from pictures ORDER BY created_at DESC LIMIT $cPage,$nbrPerPage");
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
     else
@@ -43,7 +46,7 @@ if (isset($_SESSION)) {
             <?php foreach ($photos as $photo):?>
             <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">
             <?php endforeach;?>
-            <?php for ($i=1;$i<=$allPage;$i++);{
+            <?php for ($i=1;$i<=$allPage;$i++){
             echo "<a href=\"gallery.php?p=$i\">$i</a>/";
             }?>
         </div>
