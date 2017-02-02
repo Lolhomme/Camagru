@@ -90,7 +90,7 @@ if (isset($_SESSION['user'])) {
     <div class="row nav">
         <div class="col-xs-12 col-sm-12">
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>
-            <a id="gallery">Gallerie</a>
+            <a id="gallery" href="../gallery.php">Gallerie</a>
         </div>
     </div>
     <div class="row display">
@@ -98,11 +98,9 @@ if (isset($_SESSION['user'])) {
             <video id="video"></video>
             <div id="previewCam" style="display: none">
                 <img src="#" id="photo" alt="photo" style="display: none">
-<!--                <img id="calque" src="../img/filters/1.png" style="display: none"/>-->
                 <canvas id="canvas"></canvas>
             </div>
             <div id="preview" style="display: none">
-<!--                <img id="calque" src="../img/filters/1.png"/>-->
             </div>
             <div class="col-xs-12 filters">
                 <?php $i = 1;?>
@@ -135,7 +133,6 @@ if (isset($_SESSION['user'])) {
     </div>
 </div>
 <script type="text/javascript" src="../js/takepicture.js"></script>
-<!--<script type="text/javascript" src="../js/uploadpicture.js"></script>-->
 </body>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
