@@ -16,10 +16,17 @@ if (isset($_SESSION['user'])){
         if ($req->execute())
             echo 'Success';
         /*Nombre de like*/
-        $req = $db->prepare('select count(id) from .like where (pictures_id=:pictures_id');
+        $req = $db->prepare('select count(*) from .like where (pictures_id=:pictures_id');
         $req->bindValue(':pictures_id', $pictures_id);
         if ($req->execute() && $row = $req->fetchColumn())
             $NbrLikes = $row;
+
+        /*Deja liké*/
+        $req = $db->prepare('select count (*) from .like where (pictures_id=:pictures_id) and (users_id=:users_id)');
+        $req = array(':pictures_id', $pictures_id,
+                     ':users_id', $_SESSION['id']);
+        if ($req->execute() && $row = $req->fetchColumn())
+            $isLiked = $row;
     }
 }
 ?>
@@ -46,9 +53,10 @@ if (isset($_SESSION['user'])){
             <img src="img/uploads/<?=$pictureId?>.png">
         </div>
         <div class="col-xs-12 like">
-            <button id="likeBts"></button>145
+            <button id="likeBts"></button>
             <input type="hidden" id="img-d" value="">
         </div>
+        <p id="likeNbr"<?=number_format($NbrLikes);?>></p>
     </div>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
