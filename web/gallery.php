@@ -2,7 +2,7 @@
 require ('./includes/dbConnect.php');
 session_start();
 
-if (isset($_SESSION)) {
+if (isset($_SESSION['user'])) {
 
     /*Pagination*/
     $req = $db->prepare('select count(id) from pictures');

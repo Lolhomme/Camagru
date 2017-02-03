@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (isset($_SESSION['user'])){
+    if (isset($_GET['id'])){
+        $pictureId = $_GET['id'];
+    }
+}
 ?>
 <!DOCTYPE>
 <html>
@@ -20,14 +27,13 @@
     </div>
     <div class="row picture">
         <div class="col-xs-12 photo">
-            <img src="img/uploads/<?=$_GET['id']?>.png">
+            <img src="img/uploads/<?=$pictureId?>.png">
         </div>
         <div class="col-xs-12 like">
-            <button id="likeBts">Like</button>
+            <button id="likeBts"></button>145
+            <input type="hidden" id="img-d" value="">
         </div>
     </div>
-</div>
-</body>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
 </footer>
