@@ -1,9 +1,25 @@
 <?php
+require ('./includes/dbConnect.php');
 session_start();
 
 if (isset($_SESSION['user'])){
-    if (isset($_GET['id'])){
-        $pictureId = $_GET['id'];
+    if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
+        header('location: index.php');
+
+    else{
+
+        /*Like button*/
+        $pictures_id = $_GET['id'];
+        $req = $db->prepare('INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, pictures_id)');
+        $req->bindValue(':users_id', $_SESSION['id'], \PDO::PARAM_INT);
+        $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
+        if ($req->execute())
+            echo 'Success';
+        /*Nombre de like*/
+        $req = $db->prepare('select count(id) from .like where (pictures_id=:pictures_id');
+        $req->bindValue(':pictures_id', $pictures_id);
+        if ($req->execute() && $row = $req->fetchColumn())
+            $NbrLikes = $row;
     }
 }
 ?>
