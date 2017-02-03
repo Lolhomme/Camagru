@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>Camagru-Gallery</title>
     <link href="css/grid.css" type="text/css" rel="stylesheet">
-    <link href="css/gallery.css" type="text/css" rel="stylesheet">
+    <link href="css/picture.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -21,6 +21,9 @@
     <div class="row picture">
         <div class="col-xs-12 photo">
             <img src="img/uploads/<?=$_GET['id']?>.png">
+        </div>
+        <div class="col-xs-12 like">
+            <button id="likeBts">Like</button>
         </div>
     </div>
 </div>
