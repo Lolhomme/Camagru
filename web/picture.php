@@ -6,32 +6,31 @@ if (isset($_SESSION['user'])){
     if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
         header('location: index.php');
 
-    /*Déjà liké + like id*/
     $pictures_id = $_GET['id'];
+
+    /*Like ID + Déjà liké*/
     $req = $db->prepare("select id from .like where (pictures_id=:pictures_id) and (users_id=:users_id)");
     $req->bindValue(':pictures_id', $pictures_id);
     $req->bindValue(':users_id', $_SESSION['user']['id']);
-    if ($req->execute() && $row = $req->fetch()){
-        $isLiked = true;
+    if ($req->execute() && $row = $req->fetch()) {
         $likeId = $row['id'];
-     }
+        $isLiked = true;
+    }
+
     if (!empty($_POST)){
         if (isset($isLiked)){ /*Unlike button*/
-          /*  echo 'test';
-            print_r($likeId);
-            die();*/
             $req = $db->prepare("delete from .like where id=:id");
-            $req->bindValue(':id', $likeId)
-            if ($req->execute())
-                $isLiked = false;
+            $req->bindValue(':id', $likeId);
+            $req->execute();
         }
-        else
-        /*Like button*/
-        $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
-        $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-        $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
-        $req->execute();
+        else { /*Like button*/
+            $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
+            $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+            $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
+            $req->execute();
+        }
     }
+
     /*Nombre de like*/
     $req = $db->prepare("select count(*) from .like where (pictures_id=:pictures_id)");
     $req->bindValue(':pictures_id', $pictures_id);
@@ -64,11 +63,7 @@ if (isset($_SESSION['user'])){
         <div class="col-xs-12 like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                <?php if (isset($isLiked)):?>
-                    <button id="inactive"></button>
-                <? else :?>
                     <button id="likeBts"></button>
-                <?php endif ;?>
                 <p id="likeNbr"><?=number_format($NbrLikes);?></p>
             </form>
         </div>
