@@ -45,6 +45,7 @@ DROP TABLE IF EXISTS `camagru`.`comment` ;
 
 CREATE TABLE IF NOT EXISTS `camagru`.`comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `content` TEXT NULL,
   `users_id` INT NOT NULL,
   `pictures_id` INT NOT NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
