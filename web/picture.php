@@ -44,12 +44,22 @@ if (isset($_SESSION['user'])){
     }
 
     /*Get comments and datetime*/
-    $req = $db->prepare("select content, created_at from comment where (pictures_id=:pictures_id) order by created_at");
+    $req = "SELECT 
+                comment.content, 
+                comment.created_at, 
+                users.id, 
+                user.username
+            FROM comment
+            JOIN users ON users.id=comment.users_id
+            WHERE comment.pictures_id=:pictures_id
+            ORDER BY comment.created_at"
+    $req = $db->prepare("select content, created_at, users_id from comment where (pictures_id=:pictures_id) order by created_at");
     $req->bindValue(':pictures_id', $pictures_id);
     if ($req->execute() && $row = $req->fetchAll()) {
-        print_r($row);
+//        print_r($row);
         $comments = $row;
     }
+
     /*Nombre de like*/
     $req = $db->prepare("select count(*) from .like where (pictures_id=:pictures_id)");
     $req->bindValue(':pictures_id', $pictures_id);
