@@ -7,17 +7,18 @@ if (isset($_SESSION['user'])){
         header('location: index.php');
 
     $pictures_id = $_GET['id'];
+    $users_id = $_SESSION['user']['id'];
 
     /*Like ID + Déjà liké*/
     $req = $db->prepare("select id from .like where (pictures_id=:pictures_id) and (users_id=:users_id)");
     $req->bindValue(':pictures_id', $pictures_id);
-    $req->bindValue(':users_id', $_SESSION['user']['id']);
+    $req->bindValue(':users_id', $users_id);
     if ($req->execute() && $row = $req->fetch()) {
         $likeId = $row['id'];
         $isLiked = true;
     }
 
-    if (!empty($_POST)){
+    if (!empty($_POST['picId'])){
         if (isset($isLiked)){ /*Unlike button*/
             $req = $db->prepare("delete from .like where id=:id");
             $req->bindValue(':id', $likeId);
@@ -25,12 +26,31 @@ if (isset($_SESSION['user'])){
         }
         else { /*Like button*/
             $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
-            $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+            $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
             $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
             $req->execute();
         }
     }
 
+    if (!empty($_POST['textCom'])){
+        $content = htmlspecialchars($_POST['textCom']);
+
+        /*Comment*/
+        $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
+        $req->bindValue('users_id', $users_id);
+        $req->bindValue(':pictures_id', $pictures_id);
+        $req->bindValue(':content', $content);
+        $req->execute();
+    }
+
+    /*Display comment*/
+    $req = $db->prepare("select content from comment where (users_id=:users_id) and (pictures_id=:pictures_id) order by created_at");
+    $req->bindValue('users_id', $users_id);
+    $req->bindValue(':pictures_id', $pictures_id);
+    if ($req->execute() && $row = $req->fetchAll()) {
+        print_r($row);
+        $comments = $row['content'];
+    }
     /*Nombre de like*/
     $req = $db->prepare("select count(*) from .like where (pictures_id=:pictures_id)");
     $req->bindValue(':pictures_id', $pictures_id);
@@ -57,13 +77,19 @@ if (isset($_SESSION['user'])){
         </div>
     </div>
     <div class="row picture">
-        <div class="col-xs-12 photo">
+        <div class="col-xs-12 col-md-8 photo">
             <img src="img/uploads/<?=$pictures_id?>.png">
+        </div>
+        <div class="col-xs-12 col-md-4 comment">
+            <form action="" method="post">
+                <input type="text" name="textCom">
+                <button type="submit" id="sendCom">Poster votre commentaire</button>
+            </form>
         </div>
         <div class="col-xs-12 like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                    <button id="likeBts"></button>
+                <button id="likeBts"></button>
                 <p id="likeNbr"><?=number_format($NbrLikes);?></p>
             </form>
         </div>
