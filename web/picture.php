@@ -24,7 +24,7 @@ if (isset($_SESSION['user'])) {
         $isLiked = true;
     }
 
-    if (!empty($_POST['picId'])) {
+    if (!empty($_POST['picId'])) { /*LIKE*/
         if (isset($isLiked)) { /*Unlike button*/
             $req = $db->prepare("delete from .like where id=:id");
             $req->bindValue(':id', $likeId);
@@ -37,7 +37,7 @@ if (isset($_SESSION['user'])) {
         }
     }
 
-    if (!empty($_POST['textCom'])) {
+    if (!empty($_POST['textCom'])) { /*COMMENT*/
         $content = htmlspecialchars($_POST['textCom']);
 
         /*Comment*/
@@ -62,9 +62,17 @@ if (isset($_SESSION['user'])) {
         }
     }
 
-    if (!empty($_POST['delPic'])){
-        if ($author['id'] = $users_id)
-            
+    if (!empty($_POST['delPic'])){ /*DELETE*/
+        if ($author['id'] = $users_id) {
+            $req = $db->prepare("delete from pictures where id=:id");
+            $req->bindValue(':id', $pictures_id);
+            if ($req->execute()){
+                if (file_exists('./img/uploads/'.$pictures_id.'.png')) {
+                    unlink('./img/uploads/' . $pictures_id . '.png');
+                    header('location: index.php');
+                }
+            }
+        }
     }
 
     /*Get comments datetime and username*/
@@ -111,7 +119,7 @@ if (isset($_SESSION['user'])) {
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
         <div class="col-xs-12 col-md-4 comment">
-            <form action="" method="post">
+            <form  method="post">
                 <input type="text" name="textCom">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
@@ -128,8 +136,8 @@ if (isset($_SESSION['user'])) {
             </form>
         </div>
         <div class="col-xs-12 col-md-2-nogutter delete">
-            <form action="picture.php?id=<?=$pictures_id?>" method="post">
-                <input name="delPic" type="hidden">
+            <form method="post">
+                <input name="delPic" type="hidden" value="<?=$pictures_id?>">
                 <button type="submit" id="delImg">Supprimer votre ganache</button>
             </form>
         </div>

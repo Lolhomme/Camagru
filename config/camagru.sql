@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `camagru`.`comment` (
   CONSTRAINT `fk_comment_pictures1`
     FOREIGN KEY (`pictures_id`)
     REFERENCES `camagru`.`pictures` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `camagru`.`like` (
   CONSTRAINT `fk_like_pictures1`
     FOREIGN KEY (`pictures_id`)
     REFERENCES `camagru`.`pictures` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
