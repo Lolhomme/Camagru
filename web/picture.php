@@ -43,13 +43,12 @@ if (isset($_SESSION['user'])){
         $req->execute();
     }
 
-    /*Display comment*/
-    $req = $db->prepare("select content from comment where (users_id=:users_id) and (pictures_id=:pictures_id) order by created_at");
-    $req->bindValue('users_id', $users_id);
+    /*Get comments and datetime*/
+    $req = $db->prepare("select content, created_at from comment where (pictures_id=:pictures_id) order by created_at");
     $req->bindValue(':pictures_id', $pictures_id);
     if ($req->execute() && $row = $req->fetchAll()) {
         print_r($row);
-        $comments = $row['content'];
+        $comments = $row;
     }
     /*Nombre de like*/
     $req = $db->prepare("select count(*) from .like where (pictures_id=:pictures_id)");
@@ -85,6 +84,10 @@ if (isset($_SESSION['user'])){
                 <input type="text" name="textCom">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
+            <?php foreach ($comments as $comment):?>
+            <p><?=htmlspecialchars($comment['content']);?></p>
+            <p>Posté le : <?=$comment['created_at'];?></p>
+            <? endforeach;?>
         </div>
         <div class="col-xs-12 like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
