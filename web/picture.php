@@ -2,12 +2,18 @@
 require ('./includes/dbConnect.php');
 session_start();
 
-if (isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
         header('location: index.php');
 
     $pictures_id = $_GET['id'];
     $users_id = $_SESSION['user']['id'];
+
+    /*Get author username and id picture*/
+    $req = $db->prepare("select users.mail, users.id from users join pictures on users.id=pictures.users_id where pictures.id=:pictures_id");
+    $req->bindValue(':pictures_id', $pictures_id);
+    if ($req->execute() && $row = $req->fetch())
+        $author = $row;
 
     /*Like ID + Déjà liké*/
     $req = $db->prepare("select id from .like where (pictures_id=:pictures_id) and (users_id=:users_id)");
@@ -18,13 +24,12 @@ if (isset($_SESSION['user'])){
         $isLiked = true;
     }
 
-    if (!empty($_POST['picId'])){
-        if (isset($isLiked)){ /*Unlike button*/
+    if (!empty($_POST['picId'])) {
+        if (isset($isLiked)) { /*Unlike button*/
             $req = $db->prepare("delete from .like where id=:id");
             $req->bindValue(':id', $likeId);
             $req->execute();
-        }
-        else { /*Like button*/
+        } else { /*Like button*/
             $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
             $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
             $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
@@ -32,7 +37,7 @@ if (isset($_SESSION['user'])){
         }
     }
 
-    if (!empty($_POST['textCom'])){
+    if (!empty($_POST['textCom'])) {
         $content = htmlspecialchars($_POST['textCom']);
 
         /*Comment*/
@@ -40,29 +45,26 @@ if (isset($_SESSION['user'])){
         $req->bindValue('users_id', $users_id);
         $req->bindValue(':pictures_id', $pictures_id);
         $req->bindValue(':content', $content);
-        if ($req->execute()){
-            $req = $db->prepare("select users.mail from users join pictures on users.id=pictures.users_id where pictures.id=:pictures_id");
-            $req->bindValue(':pictures_id', $pictures_id);
+        if ($req->execute()) {
+            $destinataire = $author['mail'];
 
-            /*Get author picture*/
-            if ($req->execute() && $row = $req->fetch()){
-                print_r($row);
-                $author = $row;
-                $destinataire = $row['mail'];
-
-                $subject = "Nouveau commentaire";
-                $header = "De Camagru tête de cul";
-                $message = 'Bonjour du gland,
+            $subject = "Nouveau commentaire";
+            $header = "De Camagru tête de cul";
+            $message = 'Bonjour du gland,
     
      Un membre vient de commenter votre photo :
       
-     '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/picture.php?id='.$pictures_id.'
+     ' . $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . '/picture.php?id=' . $pictures_id . '
      
      -----------------------
      Ceci est un email automatique, veuillez ne pas y répondre.';
-                mail($destinataire, $subject, $header, $message);
-            }
+            mail($destinataire, $subject, $header, $message);
         }
+    }
+
+    if (!empty($_POST['delPic'])){
+        if ($author['id'] = $users_id)
+            
     }
 
     /*Get comments datetime and username*/
@@ -76,10 +78,8 @@ if (isset($_SESSION['user'])){
             WHERE comment.pictures_id=:pictures_id
             ORDER BY comment.created_at");
     $req->bindValue(':pictures_id', $pictures_id);
-    if ($req->execute() && $row = $req->fetchAll()) {
-//        print_r($row);
+    if ($req->execute() && $row = $req->fetchAll())
         $comments = $row;
-    }
 
     /*Nombre de like*/
     $req = $db->prepare("select count(*) from .like where (pictures_id=:pictures_id)");
@@ -107,7 +107,7 @@ if (isset($_SESSION['user'])){
         </div>
     </div>
     <div class="row picture">
-        <div class="col-xs-12 col-md-8 photo">
+        <div class="col-xs-12 col-md-8-nogutter photo">
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
         <div class="col-xs-12 col-md-4 comment">
@@ -120,11 +120,17 @@ if (isset($_SESSION['user'])){
             <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
             <? endforeach;?>
         </div>
-        <div class="col-xs-12 like">
+        <div class="col-xs-12 col-md-1-nogutter like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
                 <button id="likeBts"></button>
                 <p id="likeNbr"><?=number_format($NbrLikes);?></p>
+            </form>
+        </div>
+        <div class="col-xs-12 col-md-2-nogutter delete">
+            <form action="picture.php?id=<?=$pictures_id?>" method="post">
+                <input name="delPic" type="hidden">
+                <button type="submit" id="delImg">Supprimer votre ganache</button>
             </form>
         </div>
     </div>
