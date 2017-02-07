@@ -40,20 +40,41 @@ if (isset($_SESSION['user'])){
         $req->bindValue('users_id', $users_id);
         $req->bindValue(':pictures_id', $pictures_id);
         $req->bindValue(':content', $content);
-        $req->execute();
+        if ($req->execute()){
+            $req = $db->prepare("select users.mail from users join pictures on users.id=pictures.users_id where pictures.id=:pictures_id");
+            $req->bindValue(':pictures_id', $pictures_id);
+
+            /*Get author picture*/
+            if ($req->execute() && $row = $req->fetch()){
+                print_r($row);
+                $author = $row;
+                $destinataire = $row['mail'];
+
+                $subject = "Nouveau commentaire";
+                $header = "De Camagru tête de cul";
+                $message = 'Bonjour du gland,
+    
+     Un membre vient de commenter votre photo :
+      
+     '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/picture.php?id='.$pictures_id.'
+     
+     -----------------------
+     Ceci est un email automatique, veuillez ne pas y répondre.';
+                mail($destinataire, $subject, $header, $message);
+            }
+        }
     }
 
-    /*Get comments and datetime*/
-    $req = "SELECT 
+    /*Get comments datetime and username*/
+    $req = $db->prepare("SELECT 
                 comment.content, 
                 comment.created_at, 
                 users.id, 
-                user.username
+                users.username
             FROM comment
             JOIN users ON users.id=comment.users_id
             WHERE comment.pictures_id=:pictures_id
-            ORDER BY comment.created_at"
-    $req = $db->prepare("select content, created_at, users_id from comment where (pictures_id=:pictures_id) order by created_at");
+            ORDER BY comment.created_at");
     $req->bindValue(':pictures_id', $pictures_id);
     if ($req->execute() && $row = $req->fetchAll()) {
 //        print_r($row);
@@ -96,7 +117,7 @@ if (isset($_SESSION['user'])){
             </form>
             <?php foreach ($comments as $comment):?>
             <p><?=htmlspecialchars($comment['content']);?></p>
-            <p>Posté le : <?=$comment['created_at'];?></p>
+            <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
             <? endforeach;?>
         </div>
         <div class="col-xs-12 like">
