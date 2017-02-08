@@ -69,7 +69,7 @@ if (isset($_SESSION['user'])) {
             if ($req->execute()){
                 if (file_exists('./img/uploads/'.$pictures_id.'.png')) {
                     unlink('./img/uploads/' . $pictures_id . '.png');
-                    header('location: index.php');
+                    header('location: gallery.php');
                 }
             }
         }

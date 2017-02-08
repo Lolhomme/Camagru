@@ -43,11 +43,15 @@ if (isset($_SESSION['user'])) {
     </div>
     <div class="row allPictures">
         <div class="col-xs-12 pagination">
-            <?php foreach ($photos as $photo):?>
+            <?php
+            if (!isset($noUploads))
+                foreach ($photos as $photo):?>
                 <a href="picture.php?id=<?=$photo['id']?>">
                     <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">
                 </a>
-            <?php endforeach;?>
+            <?php endforeach;
+            else
+                echo '<h4>Aucune ganache.</h4>';?>
             <?php for ($i=1;$i<=$allPage;$i++){
                 if ($i == $cPage)
                     echo "$i/";
