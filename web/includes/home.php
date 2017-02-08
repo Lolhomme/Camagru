@@ -8,7 +8,11 @@ if (isset($_SESSION['user'])) {
             if (empty($errors)) {
 
                 /*Creation image*/
-                $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+                try{
+                    $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+                } catch(\Exception $e){
+                    $errors['content'] = true;
+                }
                 $filter = './img/filters/' . $_POST['filterId'] . '.png';
                 $width = 640;
                 $height = 480;
@@ -26,22 +30,38 @@ if (isset($_SESSION['user'])) {
                 imagedestroy($tmp_filter);
                 imagedestroy($true_filter);
 
-                /*Enregistre l'adresse de la photo dans la DB*/
-                $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-                $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-                if ($req->execute()) {
+                if (empty($errors)){
 
-                    /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
-                    $picture_id = $db->lastInsertId();
-                    imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-                    imagedestroy($tmp_img);
+                    /*Enregistre l'adresse de la photo dans la DB*/
+                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                    if ($req->execute()) {
+
+                        /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+                        $picture_id = $db->lastInsertId();
+                        imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                        imagedestroy($tmp_img);
+                    }
                 }
             }
         }
         else { /*Upload from hard drive*/
+
+            /*All errors*/
+            if ($_FILES['file-to-upload']['error'] > 0)
+                $errors['upload'] = true;
+            if ($_FILES['file-to-upload']['type'] != 'image/jpeg' && $_FILES['file-to-upload']['type'] != 'image/png')
+                $errors['type'] = true;
+            if ($_FILES['file-to-upload']['size'] > 1048576)
+                $errors['size'] = true;
+
             if (empty($errors)) {
 
-                $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+                try {
+                    $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+                } catch (\Exception $e){
+                    $errors['content'] = true;
+                }
                 $filter = './img/filters/' . $_POST['filterId2'] . '.png';
                 list($width, $height) = getimagesize($_FILES['file-to-upload']['tmp_name']);
                 list($filter_w, $filter_h) = getimagesize($filter);
@@ -57,12 +77,15 @@ if (isset($_SESSION['user'])) {
                     $errors['creation'] = true;
                 imagedestroy($tmp_filter);
                 imagedestroy($true_filter);
-                $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-                $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-                if ($req->execute()) {
-                    $picture_id = $db->lastInsertId();
-                    imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-                    imagedestroy($tmp_img);
+
+                if (empty($errors)){
+                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                    if ($req->execute()) {
+                        $picture_id = $db->lastInsertId();
+                        imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                        imagedestroy($tmp_img);
+                    }
                 }
             }
         }
@@ -92,6 +115,20 @@ if (isset($_SESSION['user'])) {
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>
             <a id="gallery" href="../gallery.php">Gallerie</a>
         </div>
+    </div>
+    <div class="row" id="errors">
+        <?php
+        echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+        if (isset($errors['type']))
+            echo '<h4>Format non autorisé.</h4>';
+        if (isset($errors['size']))
+            echo '<h4>Fichier trop volumineux</h4>';
+        if (isset($errors['creation']) || isset($errors['content']))
+            echo '<h4>Une erreur est survenue lors de la creation de votre photo.</h4>';
+        if (isset($errors['upload']))
+            echo "<h4>Une erreur est survenue lors du téléchargement.</h4>";
+        echo '</div>';
+        ?>
     </div>
     <div class="row display">
         <div class="col-xs-12 col-sm-8 main">
