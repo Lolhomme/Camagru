@@ -36,21 +36,45 @@ body h1{
     background-size: contain;
 }
 
-.picture .like #inactive{
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 30px;
+#sendCom{
+    color: white;
     height: 30px;
-    margin-top: 10px;
-    background-image: url("../img/icons/like.jpeg");
-    background-size: contain;
-    -webkit-filter: invert(100%);
+    border-radius: 15px;
+    font-size: 15px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    background-color: #0e84b5;
 }
 
+#sendCom:hover{
+    color: #0e84b5;
+    border: 1px solid #0e84b5;
+    background: white;
+    transition: 0.5s;
+}
+
+#delImg{
+    color: white;
+    height: 30px;
+    border-radius: 15px;
+    font-size: 15px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    background-color: darkred;
+}
+
+#delImg:hover{
+    color: darkred;
+    border: 1px solid darkred;
+    background: white;
+    transition: 0.5s;
+}
+#errors {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+}
 .picture .like #likeBts:hover{
 -webkit-filter: invert(100%);
-}
-.picture .comment form{
-    /*display: inline-block;*/
 }

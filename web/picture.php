@@ -121,14 +121,13 @@ else
         <div class="col-xs-12-nogutter photo">
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
-        <div class="col-xs-12 col-sm-2 like">
+        <div class="col-xs-12-nogutter like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                <button id="likeBts"></button>
-                <p id="likeNbr"><?=number_format($NbrLikes);?></p>
+                <button id="likeBts"></button>  <?=number_format($NbrLikes);?>
             </form>
         </div>
-        <div class="col-xs-12 col-sm-8 comment">
+        <div class="col-xs-12-nogutter comment">
             <form  method="post">
                 <input type="text" name="textCom">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
@@ -140,7 +139,7 @@ else
                     <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
                 <? endforeach;?>
         </div>
-        <div class="col-xs-12 col-md-12 delete">
+        <div class="col-xs-12-nogutter delete">
             <form method="post">
                 <input name="delPic" type="hidden" value="<?=$pictures_id?>">
                 <button type="submit" id="delImg">Supprimer votre ganache</button>

@@ -3,8 +3,11 @@ require ('dbConnect.php');
 session_start();
 $errors = array();
 if (isset($_SESSION['user'])) {
-    if (!empty($_POST)) {
+    if (!empty($_POST)){
+        if (empty($_POST['filterId']) && empty($_POST['filterId2']))
+            $errors['noFilter'] = true;
         if (empty($_FILES)) { /*Upload from webcam*/
+
             if (empty($errors)) {
 
                 /*Creation image*/
@@ -125,6 +128,8 @@ if (isset($_SESSION['user'])) {
             echo '<h4>Une erreur est survenue lors de la creation de votre photo.</h4>';
         if (isset($errors['upload']))
             echo "<h4>Une erreur est survenue lors du téléchargement.</h4>";
+        if (isset($errors['noFilter']))
+            echo "<h4>Veuillez selectionner un filtre.</h4>";
         echo '</div>';
         ?>
     </div>
