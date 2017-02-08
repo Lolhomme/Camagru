@@ -123,7 +123,9 @@ if (isset($_SESSION['user'])) {
                 <input type="text" name="textCom">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
-            <?php foreach ($comments as $comment):?>
+            <?php
+            if (isset($comments))
+                foreach ($comments as $comment):?>
             <p><?=htmlspecialchars($comment['content']);?></p>
             <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
             <? endforeach;?>
