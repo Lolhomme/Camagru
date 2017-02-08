@@ -36,6 +36,13 @@ body h1{
     background-size: contain;
 }
 
+#com{
+    height: 100px;
+    font-size: 15px;
+    text-align: left;
+    margin: 10px 0px;
+}
+
 #sendCom{
     color: white;
     height: 30px;

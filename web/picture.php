@@ -127,9 +127,9 @@ else
                 <button id="likeBts"></button>  <?=number_format($NbrLikes);?>
             </form>
         </div>
-        <div class="col-xs-12-nogutter comment">
+        <div class="col-xs-8-nogutter comment">
             <form  method="post">
-                <input type="text" name="textCom">
+                <input placeholder="Laissez une trace..." type="text" name="textCom" id="com" class="col-xs-12-nogutter">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
             <?php
