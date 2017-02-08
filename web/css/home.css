@@ -25,6 +25,30 @@ body h1{
     line-height: 2.1em;
 }
 
+button{
+    color: white;
+    height: 30px;
+    border-radius: 15px;
+    font-size: 15px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    background-color: #0e84b5;
+}
+
+button:hover{
+    color: #0e84b5;
+    border: 1px solid #0e84b5;
+    background: white;
+    transition: 0.5s;
+}
+
+#errors {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+}
+
 .display{
     background-color: #0e84b5;
 }
@@ -36,4 +60,10 @@ body h1{
 .display #last_photos{
     width: 160px;
     height: 120px;
+}
+
+.display .filters img{
+    width: 150px;
+    height: 150px;
+    margin-right: 90px;
 }

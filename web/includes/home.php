@@ -95,8 +95,6 @@ if (isset($_SESSION['user'])) {
     $req->bindValue(':users_id', $_SESSION['user']['id']);
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
-    else
-        $noUploads = true;
 }
 ?>
 <!DOCTYPE>
@@ -139,31 +137,35 @@ if (isset($_SESSION['user'])) {
             </div>
             <div id="preview" style="display: none">
             </div>
-            <div class="col-xs-12 filters">
+            <div class="col-xs-12-nogutter col-sm-12-nogutter filters">
                 <?php $i = 1;?>
                 <?php for (;$i <= 3; $i++):?>
                     <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>" style="border: 1px solid transparent">
                 <?php endfor;?>
                 <input id="nbrFilters" type="hidden" value="<?=$i - 1;?>">
             </div>
-            <form id="formCam" method="post" enctype="multipart/form-data" style="display: none">
-                <input type="hidden" id="base-img" name="base-img" value="none">
-                <input id="filter-id" type="hidden" name="filterId" value="0">
-                <button id="startbutton">Prendre une photo</button>
-                <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
-            </form>
-            <form id="formUpl" method="post" enctype="multipart/form-data" style="display: none">
-                <input type="hidden" name="max_file_size" value="1048576">
-                <input id="filter-id2" type="hidden" name="filterId2" value="0">
-                <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
-                <button type="submit" id="savebutton_UP" name="upload-ext" style="display: none">Sauvegarder</button>
-            </form>
+            <div class="col-xs-12 forms">
+                <form id="formCam" method="post" enctype="multipart/form-data" style="display: none">
+                    <input type="hidden" id="base-img" name="base-img" value="none">
+                    <input id="filter-id" type="hidden" name="filterId" value="0">
+                    <button id="startbutton">Prendre une photo</button>
+                    <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
+                </form>
+                <form id="formUpl" method="post" enctype="multipart/form-data" style="display: none">
+                    <input type="hidden" name="max_file_size" value="1048576">
+                    <input id="filter-id2" type="hidden" name="filterId2" value="0">
+                    <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
+                    <button type="submit" id="savebutton_UP" name="upload-ext" style="display: none">Sauvegarder</button>
+                </form>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-sm-push-4 side">
-            <?php if (isset($noUploads))
+            <h4>Vos ganaches</h4>
+            <?php if (!isset($photos))
                 echo "<h4>Aucune ganache de vous</h4>";?>
             <?php if (is_array($photos))
                 foreach ($photos as $photo) : ?>
+            <a href="../picture.php?id=<?=$photo['id']?>">
                     <img id="last_photos" src="../img/uploads/<?php echo $photo['id']?>.png">
                 <?php endforeach; ?>
         </div>

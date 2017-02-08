@@ -20,9 +20,9 @@ if (isset($_SESSION['user'])) {
     $req = $db->prepare("select id from pictures ORDER BY created_at DESC LIMIT $cPage,$nbrPerPage");
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
-    else
-        $noUploads = true;
 }
+else
+    header('location: index.php');
 ?>
 <!DOCTYPE>
 <html>
@@ -44,7 +44,7 @@ if (isset($_SESSION['user'])) {
     <div class="row allPictures">
         <div class="col-xs-12 pagination">
             <?php
-            if (!isset($noUploads))
+            if (isset($photos))
                 foreach ($photos as $photo):?>
                 <a href="picture.php?id=<?=$photo['id']?>">
                     <img id="picture" src="img/uploads/<?php echo $photo['id']?>.png">

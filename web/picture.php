@@ -2,6 +2,7 @@
 require ('./includes/dbConnect.php');
 session_start();
 
+$errors = array();
 if (isset($_SESSION['user'])) {
     if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
         header('location: index.php');
@@ -37,7 +38,7 @@ if (isset($_SESSION['user'])) {
         }
     }
 
-    if (!empty($_POST['textCom'])) { /*COMMENT*/
+    if (!empty($_POST['textCom'] && is_string($_POST['textCom']))){
         $content = htmlspecialchars($_POST['textCom']);
 
         /*Comment*/
@@ -95,6 +96,8 @@ if (isset($_SESSION['user'])) {
     if ($req->execute() && $row = $req->fetchColumn())
         $NbrLikes = $row;
 }
+else
+    header('location: index.php');
 ?>
 <!DOCTYPE>
 <html>
@@ -115,10 +118,17 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
     <div class="row picture">
-        <div class="col-xs-12 col-md-8-nogutter photo">
+        <div class="col-xs-12-nogutter photo">
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
-        <div class="col-xs-12 col-md-4 comment">
+        <div class="col-xs-12 col-sm-2 like">
+            <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
+                <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
+                <button id="likeBts"></button>
+                <p id="likeNbr"><?=number_format($NbrLikes);?></p>
+            </form>
+        </div>
+        <div class="col-xs-12 col-sm-8 comment">
             <form  method="post">
                 <input type="text" name="textCom">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
@@ -126,18 +136,11 @@ if (isset($_SESSION['user'])) {
             <?php
             if (isset($comments))
                 foreach ($comments as $comment):?>
-            <p><?=htmlspecialchars($comment['content']);?></p>
-            <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
-            <? endforeach;?>
+                    <p><?=htmlspecialchars($comment['content']);?></p>
+                    <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
+                <? endforeach;?>
         </div>
-        <div class="col-xs-12 col-md-1-nogutter like">
-            <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
-                <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                <button id="likeBts"></button>
-                <p id="likeNbr"><?=number_format($NbrLikes);?></p>
-            </form>
-        </div>
-        <div class="col-xs-12 col-md-2-nogutter delete">
+        <div class="col-xs-12 col-md-12 delete">
             <form method="post">
                 <input name="delPic" type="hidden" value="<?=$pictures_id?>">
                 <button type="submit" id="delImg">Supprimer votre ganache</button>
