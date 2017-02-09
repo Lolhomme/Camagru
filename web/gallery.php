@@ -51,12 +51,12 @@ else
                 </a>
             <?php endforeach;
             else
-                echo '<h4>Aucune ganache.</h4>';?>
+                echo '<h4 style="color: white">Aucune ganache.</h4>';?>
             <?php for ($i=1;$i<=$allPage;$i++){
                 if ($i == $cPage)
                     echo "$i/";
                 else
-                    echo "<a href=\"gallery.php?p=$i\">$i</a>/";
+                    echo "<a id='page' href=\"gallery.php?p=$i\">$i</a>/";
             }?>
         </div>
     </div>

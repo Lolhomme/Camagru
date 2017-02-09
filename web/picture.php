@@ -118,13 +118,13 @@ else
         </div>
     </div>
     <div class="row picture">
-        <div class="col-xs-12-nogutter photo">
+        <div class="col-xs-12-nogutter col-sm-8 photo">
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
         <div class="col-xs-12-nogutter like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                <button id="likeBts"></button>  <?=number_format($NbrLikes);?>
+                <i class="fa fa-thumbs-up" aria-hidden="true" id="likeBts"></i>  <?=number_format($NbrLikes);?>
             </form>
         </div>
         <div class="col-xs-8-nogutter comment">

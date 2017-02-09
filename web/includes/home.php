@@ -93,8 +93,20 @@ if (isset($_SESSION['user'])) {
             }
         }
     }
+    /*Pagination*/
+    $req = $db->prepare('select count(id) from pictures');
+    $req->execute();
+    $row = $req->fetchColumn();
+    $nbrPerPage = 12;
+    $allPage = ceil($row / $nbrPerPage);
+    if (isset($_GET['p']) && ($_GET['p']>0 && $_GET['p']<=$allPage))
+        $firstPage = $_GET['p'];
+    else
+        $firstPage = 1;
+    $cPage = (($firstPage - 1) * $nbrPerPage);
+
     /*Get photo user*/
-    $req = $db->prepare('select id from pictures where users_id=:users_id ORDER BY created_at DESC');
+    $req = $db->prepare("select id from pictures where users_id=:users_id ORDER BY created_at DESC LIMIT $cPage,$nbrPerPage");
     $req->bindValue(':users_id', $_SESSION['user']['id']);
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
@@ -173,6 +185,12 @@ if (isset($_SESSION['user'])) {
             <a href="../picture.php?id=<?=$photo['id']?>">
                     <img id="last_photos" src="../img/uploads/<?php echo $photo['id']?>.png">
                 <?php endforeach; ?>
+                <?php for ($i=1;$i<=$allPage;$i++){
+                    if ($i == $cPage)
+                        echo "$i/";
+                    else
+                        echo "<a href=\"index.php?p=$i\">$i</a>/";
+                }?>
         </div>
     </div>
 </div>

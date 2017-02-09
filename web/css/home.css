@@ -67,3 +67,7 @@ button:hover{
     height: 150px;
     margin-right: 90px;
 }
+.side h4{
+    color: white;
+    text-align: center;
+}
