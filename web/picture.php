@@ -39,7 +39,7 @@ if (isset($_SESSION['user'])) {
     }
 
     if (!empty($_POST['textCom'] && is_string($_POST['textCom']))){
-        $content = htmlspecialchars($_POST['textCom']);
+        $content = $_POST['textCom'];
 
         /*Comment*/
         $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
@@ -111,7 +111,7 @@ else
 <div class="container">
     <h1>Galerie</h1>
     <div class="row nav">
-        <div class="col-xs-12 col-sm-12">
+        <div class="col-xs-12">
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>
             <a id="home" href="index.php">Accueil</a>
             <a id="gallery" href="gallery.php">Galerie</a>
