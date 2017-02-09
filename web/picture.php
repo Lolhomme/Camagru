@@ -100,7 +100,7 @@ else
     header('location: index.php');
 ?>
 <!DOCTYPE>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title>Camagru-Gallery</title>
@@ -118,34 +118,36 @@ else
         </div>
     </div>
     <div class="row picture">
-        <div class="col-xs-12-nogutter col-sm-8 photo">
+        <div class="col-xs-12 col-sm-8 photo" id="pic">
             <img src="img/uploads/<?=$pictures_id?>.png">
         </div>
-        <div class="col-xs-12-nogutter like">
+        <div class="col-xs-12 col-sm-8 like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
-                <i class="fa fa-thumbs-up" aria-hidden="true" id="likeBts"></i>  <?=number_format($NbrLikes);?>
+                    <button class="fa likebt" id="likebts"></button>  <?=number_format($NbrLikes);?>
             </form>
         </div>
-        <div class="col-xs-8-nogutter comment">
-            <form  method="post">
+        <div class="col-xs-12-nogutter col-sm-8 comment">
+            <form  method="post" id="come">
                 <input placeholder="Laissez une trace..." type="text" name="textCom" id="com" class="col-xs-12-nogutter">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
+        </div>
+        <div class="col-xs-12 col-sm-8 displayCom">
             <?php
             if (isset($comments))
                 foreach ($comments as $comment):?>
-                    <p><?=htmlspecialchars($comment['content']);?></p>
-                    <p>Posté par <?=$comment['username'];?> le : <?=$comment['created_at'];?></p>
+                    <p><span style="color: #004C96"><?=$comment['username'];?></span> le : <span style="color: #0e84b5"><?=$comment['created_at'];?></span> : <?=htmlspecialchars($comment['content']);?></p>
                 <? endforeach;?>
         </div>
-        <div class="col-xs-12-nogutter delete">
+        <div class="col-xs-12 col-sm-8 delete">
             <form method="post">
                 <input name="delPic" type="hidden" value="<?=$pictures_id?>">
                 <button type="submit" id="delImg">Supprimer votre ganache</button>
             </form>
         </div>
     </div>
+</div>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>
 </footer>

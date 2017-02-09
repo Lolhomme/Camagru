@@ -9,6 +9,13 @@ body h1{
     font-style: italic;
 }
 
+.photo, .like, #come{
+    background-color: #0e84b5;
+}
+
+#come{
+    padding: 0 15px;
+}
 .nav{
     height:3em;
     background-color: #0e84b5;
@@ -25,19 +32,50 @@ body h1{
     line-height: 2.1em;
 }
 
-.picture .like #likeBts{
-    margin: 0;
-    padding: 0;
-    width: auto;
-    height: auto;
-    margin-top: 10px;
+@font-face {
+    font-family: FontAwesome;
+    src: url('fonts/fontawesome-webfont.eot?v=4.5.0');
+    src: url('fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.ttf?v=4.5.0') format('truetype'), url('fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.likebt:before {
+    content: "\f164";
+}
+
+.likebt{
+    font-size: 35px;
+}
+
+.likebt:hover{
+    color: #0e84b5;
 }
 
 #com{
+    border-radius: 15px;
+    border: 1px solid transparent;
     height: 100px;
     font-size: 15px;
-    text-align: left;
-    margin: 10px 0px;
+    text-align: inherit;
+    margin-bottom: 15px;
+}
+
+.displaycom{
+    border: solid;
+    border-color: #0e84b5;
+    margin-bottom: 30px;
+    height: 30%;
+    overflow-y: scroll;
 }
 
 #sendCom{
