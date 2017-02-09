@@ -25,16 +25,13 @@ body h1{
     line-height: 2.1em;
 }
 
-/*.picture .like #likeBts{
-    border: none;
+.picture .like #likeBts{
     margin: 0;
     padding: 0;
-    width: 30px;
-    height: 30px;
+    width: auto;
+    height: auto;
     margin-top: 10px;
-    background-image: url("../img/icons/like.jpeg");
-    background-size: contain;
-}*/
+}
 
 #com{
     height: 100px;
@@ -82,7 +79,3 @@ body h1{
     text-align: center;
     margin-top: 20px;
 }
-/*
-.picture .like #likeBts:hover{
--webkit-filter: invert(100%);
-}*/
