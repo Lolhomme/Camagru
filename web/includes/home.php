@@ -177,9 +177,10 @@ if (isset($_SESSION['user'])) {
             </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-sm-push-4 side">
-            <h4>Vos ganaches</h4>
             <?php if (!isset($photos))
-                echo "<h4>Aucune ganache de vous</h4>";?>
+                echo "<h4>Aucune ganache de vous</h4>";
+            else
+                echo "<h4>Vos ganaches</h4>";?>
             <?php if (is_array($photos))
                 foreach ($photos as $photo) : ?>
             <a href="../picture.php?id=<?=$photo['id']?>">

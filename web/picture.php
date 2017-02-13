@@ -3,7 +3,7 @@ require ('./includes/dbConnect.php');
 session_start();
 
 $errors = array();
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']) && isset($_SESSION['token']) && isset($_SESSION['token_time'])) {
     if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
         header('location: index.php');
 
@@ -25,33 +25,44 @@ if (isset($_SESSION['user'])) {
         $isLiked = true;
     }
 
-    if (!empty($_POST['picId'])) { /*LIKE*/
-        if (isset($isLiked)) { /*Unlike button*/
-            $req = $db->prepare("delete from .like where id=:id");
-            $req->bindValue(':id', $likeId);
-            $req->execute();
-        } else { /*Like button*/
-            $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
-            $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
-            $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
-            $req->execute();
+    if (!empty($_POST['picId'])) {/*LIKE*/
+        if ($_SESSION['token'] == $_POST['token']) {
+            $timestamp_old = time() - (30 * 60);
+            if ($_SESSION['token_time'] >= $timestamp_old) {
+                if (isset($isLiked)) { /*Unlike button*/
+                    $req = $db->prepare("delete from .like where id=:id");
+                    $req->bindValue(':id', $likeId);
+                    $req->execute();
+                } else { /*Like button*/
+                    $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
+                    $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
+                    $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
+                    $req->execute();
+                }
+            } else
+                $errors['time'] = true;
         }
+        else
+            $errors['form'] = true;
     }
 
-    if (!empty($_POST['textCom'] && is_string($_POST['textCom']))){
-        $content = $_POST['textCom'];
+    if (!empty($_POST['textCom']) && is_string($_POST['textCom'])) { /*COMMENT*/
+        if ($_SESSION['token'] == $_POST['token']) {
+            $timestamp_old = time() - (30 * 60);
+            if ($_SESSION['token_time'] >= $timestamp_old) {
+                $content = $_POST['textCom'];
 
-        /*Comment*/
-        $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
-        $req->bindValue('users_id', $users_id);
-        $req->bindValue(':pictures_id', $pictures_id);
-        $req->bindValue(':content', $content);
-        if ($req->execute()) {
-            $destinataire = $author['mail'];
+                /*Comment*/
+                $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
+                $req->bindValue('users_id', $users_id);
+                $req->bindValue(':pictures_id', $pictures_id);
+                $req->bindValue(':content', $content);
+                if ($req->execute()) {
+                    $destinataire = $author['mail'];
 
-            $subject = "Nouveau commentaire";
-            $header = "De Camagru tête de cul";
-            $message = 'Bonjour du gland,
+                    $subject = "Nouveau commentaire";
+                    $header = "De Camagru tête de cul";
+                    $message = 'Bonjour du gland,
     
      Un membre vient de commenter votre photo :
       
@@ -59,21 +70,34 @@ if (isset($_SESSION['user'])) {
      
      -----------------------
      Ceci est un email automatique, veuillez ne pas y répondre.';
-            mail($destinataire, $subject, $header, $message);
+                    mail($destinataire, $subject, $header, $message);
+                }
+            } else
+                $errors['time'] = true;
         }
+        else
+            $errors['form'] = true;
     }
 
-    if (!empty($_POST['delPic'])){ /*DELETE*/
-        if ($author['id'] = $users_id) {
-            $req = $db->prepare("delete from pictures where id=:id");
-            $req->bindValue(':id', $pictures_id);
-            if ($req->execute()){
-                if (file_exists('./img/uploads/'.$pictures_id.'.png')) {
-                    unlink('./img/uploads/' . $pictures_id . '.png');
-                    header('location: gallery.php');
+    if (!empty($_POST['delPic'])) { /*DELETE*/
+        if ($_SESSION['token'] == $_POST['token']) {
+            $timestamp_old = time() - (30 * 60);
+            if ($_SESSION['token_time'] >= $timestamp_old) {
+                if ($author['id'] = $users_id) {
+                    $req = $db->prepare("delete from pictures where id=:id");
+                    $req->bindValue(':id', $pictures_id);
+                    if ($req->execute()) {
+                        if (file_exists('./img/uploads/' . $pictures_id . '.png')) {
+                            unlink('./img/uploads/' . $pictures_id . '.png');
+                            header('location: gallery.php');
+                        }
+                    }
                 }
-            }
+            } else
+                $errors['time'] = true;
         }
+        else
+            $errors['form'] = true;
     }
 
     /*Get comments datetime and username*/
@@ -117,6 +141,16 @@ else
             <a id="gallery" href="gallery.php">Galerie</a>
         </div>
     </div>
+    <div class="row" id="errors">
+        <?php
+        echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+        if (isset($errors['form']))
+            echo "<h4>Une erreur est survenue lors de la validation du formulaire.</h4>";
+        if (isset($errors['time']))
+            echo "<h4>Session expirée, veuillez vous reconnecter.</h4>";
+        echo '</div>';
+        ?>
+    </div>
     <div class="row picture">
         <div class="col-xs-12 col-sm-8 photo" id="pic">
             <img src="img/uploads/<?=$pictures_id?>.png">
@@ -124,12 +158,14 @@ else
         <div class="col-xs-12 col-sm-8 like">
             <form action="picture.php?id=<?=$pictures_id?>" method="post" id="toLike" name="toLike">
                 <input type="hidden" id="img-d" name="picId" value="<?=$pictures_id?>">
+                <input type="hidden" name="token" id="token" value="<?echo $_SESSION['token']?>">
                     <button class="fa likebt" id="likebts"></button>  <?=number_format($NbrLikes);?>
             </form>
         </div>
         <div class="col-xs-12-nogutter col-sm-8 comment">
             <form  method="post" id="come">
                 <input placeholder="Laissez une trace..." type="text" name="textCom" id="com" class="col-xs-12-nogutter">
+                <input type="hidden" name="token" id="token" value="<?echo $_SESSION['token']?>">
                 <button type="submit" id="sendCom">Poster votre commentaire</button>
             </form>
         </div>
@@ -143,6 +179,7 @@ else
         <div class="col-xs-12 col-sm-8 delete">
             <form method="post">
                 <input name="delPic" type="hidden" value="<?=$pictures_id?>">
+                <input type="hidden" name="token" id="token" value="<?echo $_SESSION['token']?>">
                 <button type="submit" id="delImg">Supprimer votre ganache</button>
             </form>
         </div>

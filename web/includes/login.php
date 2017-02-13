@@ -33,6 +33,8 @@ if (!empty($_POST))
         else
         {
             $_SESSION['user'] = $user;
+            $_SESSION['token'] = uniqid(rand(), true);
+            $_SESSION['token_time'] = time();
             header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
         }
     }
