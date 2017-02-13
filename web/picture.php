@@ -1,9 +1,11 @@
 <?php
 require ('./includes/dbConnect.php');
+require ('includes/anti-csrf.php');
 session_start();
 
+$token = create_token();
 $errors = array();
-if (isset($_SESSION['user']) && isset($_SESSION['token']) && isset($_SESSION['token_time'])) {
+if (isset($_SESSION['user'])) {
     if (empty($_GET['id']) || !is_numeric($_GET['id']) || $_GET['id'] <= 0)
         header('location: index.php');
 
@@ -25,44 +27,38 @@ if (isset($_SESSION['user']) && isset($_SESSION['token']) && isset($_SESSION['to
         $isLiked = true;
     }
 
-    if (!empty($_POST['picId'])) {/*LIKE*/
-        if ($_SESSION['token'] == $_POST['token']) {
-            $timestamp_old = time() - (30 * 60);
-            if ($_SESSION['token_time'] >= $timestamp_old) {
-                if (isset($isLiked)) { /*Unlike button*/
-                    $req = $db->prepare("delete from .like where id=:id");
-                    $req->bindValue(':id', $likeId);
-                    $req->execute();
-                } else { /*Like button*/
-                    $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
-                    $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
-                    $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
-                    $req->execute();
-                }
-            } else
-                $errors['time'] = true;
+    if (!empty($_POST['picId'])) {
+        if (check_token(1800, 'http://localhost:8081/picture.php?id=' . $pictures_id)) {/*LIKE*/
+            if (isset($isLiked)) { /*Unlike button*/
+                $req = $db->prepare("delete from .like where id=:id");
+                $req->bindValue(':id', $likeId);
+                $req->execute();
+            } else { /*Like button*/
+                $req = $db->prepare("INSERT INTO .like (users_id, pictures_id) VALUES (:users_id, :pictures_id)");
+                $req->bindValue(':users_id', $users_id, \PDO::PARAM_INT);
+                $req->bindValue(':pictures_id', $pictures_id, \PDO::PARAM_INT);
+                $req->execute();
+            }
         }
         else
-            $errors['form'] = true;
+            $errors['token'] = true;
     }
 
-    if (!empty($_POST['textCom']) && is_string($_POST['textCom'])) { /*COMMENT*/
-        if ($_SESSION['token'] == $_POST['token']) {
-            $timestamp_old = time() - (30 * 60);
-            if ($_SESSION['token_time'] >= $timestamp_old) {
-                $content = $_POST['textCom'];
+    if (!empty($_POST['textCom']) && is_string($_POST['textCom'])) {
+        if (check_token(1800, 'http://localhost:8081/picture.php?id=' . $pictures_id)) { /*COMMENT*/
+            $content = $_POST['textCom'];
 
-                /*Comment*/
-                $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
-                $req->bindValue('users_id', $users_id);
-                $req->bindValue(':pictures_id', $pictures_id);
-                $req->bindValue(':content', $content);
-                if ($req->execute()) {
-                    $destinataire = $author['mail'];
+            /*Comment*/
+            $req = $db->prepare("insert into comment (users_id, pictures_id, content) values (:users_id, :pictures_id, :content)");
+            $req->bindValue('users_id', $users_id);
+            $req->bindValue(':pictures_id', $pictures_id);
+            $req->bindValue(':content', $content);
+            if ($req->execute()) {
+                $destinataire = $author['mail'];
 
-                    $subject = "Nouveau commentaire";
-                    $header = "De Camagru tête de cul";
-                    $message = 'Bonjour du gland,
+                $subject = "Nouveau commentaire";
+                $header = "De Camagru tête de cul";
+                $message = 'Bonjour du gland,
     
      Un membre vient de commenter votre photo :
       
@@ -70,36 +66,29 @@ if (isset($_SESSION['user']) && isset($_SESSION['token']) && isset($_SESSION['to
      
      -----------------------
      Ceci est un email automatique, veuillez ne pas y répondre.';
-                    mail($destinataire, $subject, $header, $message);
-                }
-            } else
-                $errors['time'] = true;
+                mail($destinataire, $subject, $header, $message);
+            }
         }
         else
-            $errors['form'] = true;
+            $errors['token'] = true;
     }
 
-    if (!empty($_POST['delPic'])) { /*DELETE*/
-        if ($_SESSION['token'] == $_POST['token']) {
-            $timestamp_old = time() - (30 * 60);
-            if ($_SESSION['token_time'] >= $timestamp_old) {
-                if ($author['id'] = $users_id) {
-                    $req = $db->prepare("delete from pictures where id=:id");
-                    $req->bindValue(':id', $pictures_id);
-                    if ($req->execute()) {
-                        if (file_exists('./img/uploads/' . $pictures_id . '.png')) {
-                            unlink('./img/uploads/' . $pictures_id . '.png');
-                            header('location: gallery.php');
-                        }
-                    }
-                }
-            } else
-                $errors['time'] = true;
-        }
-        else
-            $errors['form'] = true;
+    if (!empty($_POST['delPic'])){
+       if (check_token(1800, 'http://localhost:8081/picture.php?id='.$pictures_id)) { /*DELETE*/
+           if ($author['id'] = $users_id) {
+               $req = $db->prepare("delete from pictures where id=:id");
+               $req->bindValue(':id', $pictures_id);
+               if ($req->execute()) {
+                   if (file_exists('./img/uploads/' . $pictures_id . '.png')) {
+                       unlink('./img/uploads/' . $pictures_id . '.png');
+                       header('location: gallery.php');
+                   }
+               }
+           }
+       }
+       else
+           $errors['token'] = true;
     }
-
     /*Get comments datetime and username*/
     $req = $db->prepare("SELECT 
                 comment.content, 
@@ -144,10 +133,8 @@ else
     <div class="row" id="errors">
         <?php
         echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
-        if (isset($errors['form']))
-            echo "<h4>Une erreur est survenue lors de la validation du formulaire.</h4>";
-        if (isset($errors['time']))
-            echo "<h4>Session expirée, veuillez vous reconnecter.</h4>";
+        if (isset($errors['token']))
+            echo "<h4>Erreur dans le formulaire ou session expirée.</h4>";
         echo '</div>';
         ?>
     </div>

@@ -1,105 +1,112 @@
 <?php
 require ('dbConnect.php');
+require ('anti-csrf.php');
 session_start();
+
 $errors = array();
+$token = create_token();
 if (isset($_SESSION['user'])) {
-    if (!empty($_POST)){
-        if (empty($_POST['filterId']) && empty($_POST['filterId2']))
-            $errors['noFilter'] = true;
-        if (empty($_FILES)) { /*Upload from webcam*/
+    if (!empty($_POST)) {
+        if (check_token(1800, 'http://localhost:8081/index.php')) {
+            if (empty($_POST['filterId']) && empty($_POST['filterId2']))
+                $errors['noFilter'] = true;
+            if (empty($_FILES)) { /*Upload from webcam*/
 
-            if (empty($errors)) {
+                if (empty($errors)) {
 
-                /*Creation image*/
-                try{
-                    $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
-                } catch(\Exception $e){
-                    $errors['content'] = true;
+                    /*Creation image*/
+                    try {
+                        $tmp_img = imagecreatefromstring(base64_decode(explode(',', $_POST['base-img'])[1]));
+                    } catch (\Exception $e) {
+                        $errors['content'] = true;
+                    }
+                    $filter = './img/filters/' . $_POST['filterId'] . '.png';
+                    $width = 640;
+                    $height = 480;
+                    list($filter_w, $filter_h) = getimagesize($filter);
+                    $tmp_filter = imagecreatefrompng($filter);
+                    $true_filter = imagecreatetruecolor($width, $height);
+                    imagealphablending($true_filter, false);
+                    imagesavealpha($true_filter, true);
+                    imagecolortransparent($true_filter);
+                    $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
+                    $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
+
+                    if ($a == false || $b == false)
+                        $errors['creation'] = true;
+                    imagedestroy($tmp_filter);
+                    imagedestroy($true_filter);
+
+                    if (empty($errors)) {
+
+                        /*Enregistre l'adresse de la photo dans la DB*/
+                        $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                        $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                        if ($req->execute()) {
+
+                            /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
+                            $picture_id = $db->lastInsertId();
+                            imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                            imagedestroy($tmp_img);
+                        }
+                    }
                 }
-                $filter = './img/filters/' . $_POST['filterId'] . '.png';
-                $width = 640;
-                $height = 480;
-                list($filter_w, $filter_h) = getimagesize($filter);
-                $tmp_filter = imagecreatefrompng($filter);
-                $true_filter = imagecreatetruecolor($width, $height);
-                imagealphablending($true_filter, false);
-                imagesavealpha($true_filter, true);
-                imagecolortransparent($true_filter);
-                $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
-                $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
+            } else { /*Upload from hard drive*/
 
-                if ($a == false || $b == false)
-                    $errors['creation'] = true;
-                imagedestroy($tmp_filter);
-                imagedestroy($true_filter);
+                /*All errors*/
+                if ($_FILES['file-to-upload']['error'] > 0)
+                    $errors['upload'] = true;
+                if ($_FILES['file-to-upload']['type'] != 'image/jpeg' && $_FILES['file-to-upload']['type'] != 'image/png')
+                    $errors['type'] = true;
+                if ($_FILES['file-to-upload']['size'] > 1048576)
+                    $errors['size'] = true;
 
-                if (empty($errors)){
+                if (empty($errors)) {
 
-                    /*Enregistre l'adresse de la photo dans la DB*/
-                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-                    if ($req->execute()) {
+                    try {
+                        $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
+                    } catch (\Exception $e) {
+                        $errors['content'] = true;
+                    }
+                    $filter = './img/filters/' . $_POST['filterId2'] . '.png';
+                    list($width, $height) = getimagesize($_FILES['file-to-upload']['tmp_name']);
+                    list($filter_w, $filter_h) = getimagesize($filter);
+                    $tmp_filter = imagecreatefrompng($filter);
+                    $true_filter = imagecreatetruecolor($width, $height);
+                    imagealphablending($true_filter, false);
+                    imagesavealpha($true_filter, true);
+                    imagecolortransparent($true_filter);
+                    $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
+                    $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
 
-                        /*Envoi de la photo dans un dossier côté server et destruction de l'image tmp*/
-                        $picture_id = $db->lastInsertId();
-                        imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-                        imagedestroy($tmp_img);
+                    if ($a == false || $b == false)
+                        $errors['creation'] = true;
+                    imagedestroy($tmp_filter);
+                    imagedestroy($true_filter);
+
+                    if (empty($errors)) {
+                        $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
+                        $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
+                        if ($req->execute()) {
+                            $picture_id = $db->lastInsertId();
+                            imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
+                            imagedestroy($tmp_img);
+                        }
                     }
                 }
             }
         }
-        else { /*Upload from hard drive*/
-
-            /*All errors*/
-            if ($_FILES['file-to-upload']['error'] > 0)
-                $errors['upload'] = true;
-            if ($_FILES['file-to-upload']['type'] != 'image/jpeg' && $_FILES['file-to-upload']['type'] != 'image/png')
-                $errors['type'] = true;
-            if ($_FILES['file-to-upload']['size'] > 1048576)
-                $errors['size'] = true;
-
-            if (empty($errors)) {
-
-                try {
-                    $tmp_img = imagecreatefromstring(file_get_contents($_FILES['file-to-upload']['tmp_name']));
-                } catch (\Exception $e){
-                    $errors['content'] = true;
-                }
-                $filter = './img/filters/' . $_POST['filterId2'] . '.png';
-                list($width, $height) = getimagesize($_FILES['file-to-upload']['tmp_name']);
-                list($filter_w, $filter_h) = getimagesize($filter);
-                $tmp_filter = imagecreatefrompng($filter);
-                $true_filter = imagecreatetruecolor($width, $height);
-                imagealphablending($true_filter, false);
-                imagesavealpha($true_filter, true);
-                imagecolortransparent($true_filter);
-                $a = imagecopyresampled($true_filter, $tmp_filter, 0, 0, 0, 0, $width, $height, $filter_w, $filter_h);
-                $b = imagecopyresampled($tmp_img, $true_filter, 0, 0, 0, 0, $width, $height, $width, $height);
-
-                if ($a == false || $b == false)
-                    $errors['creation'] = true;
-                imagedestroy($tmp_filter);
-                imagedestroy($true_filter);
-
-                if (empty($errors)){
-                    $req = $db->prepare('insert into pictures (users_id) values (:users_id)');
-                    $req->bindValue(':users_id', $_SESSION['user']['id'], \PDO::PARAM_INT);
-                    if ($req->execute()) {
-                        $picture_id = $db->lastInsertId();
-                        imagepng($tmp_img, './img/uploads/' . $picture_id . '.png');
-                        imagedestroy($tmp_img);
-                    }
-                }
-            }
-        }
+        else
+            $errors['token'] = true;
     }
+
     /*Pagination*/
     $req = $db->prepare('select count(id) from pictures');
     $req->execute();
     $row = $req->fetchColumn();
     $nbrPerPage = 12;
     $allPage = ceil($row / $nbrPerPage);
-    if (isset($_GET['p']) && ($_GET['p']>0 && $_GET['p']<=$allPage))
+    if (isset($_GET['p']) && ($_GET['p'] > 0 && $_GET['p'] <= $allPage))
         $firstPage = $_GET['p'];
     else
         $firstPage = 1;
@@ -132,6 +139,8 @@ if (isset($_SESSION['user'])) {
     <div class="row" id="errors">
         <?php
         echo '<div class="col-xs-12 col-sm-4 col-sm-push-4">';
+        if (isset($errors['token']))
+            echo '<h4>Erreur dans le formulaire ou session expirée.</h4>';
         if (isset($errors['type']))
             echo '<h4>Format non autorisé.</h4>';
         if (isset($errors['size']))
@@ -163,12 +172,14 @@ if (isset($_SESSION['user'])) {
             </div>
             <div class="col-xs-12 forms">
                 <form id="formCam" method="post" enctype="multipart/form-data" style="display: none">
+                    <input type="hidden" name="token" id="token" value="<?echo $_SESSION['token']?>">
                     <input type="hidden" id="base-img" name="base-img" value="none">
                     <input id="filter-id" type="hidden" name="filterId" value="0">
                     <button id="startbutton">Prendre une photo</button>
                     <button type="submit" id="savebutton" name="upload" style="display: none">Sauvegarder</button>
                 </form>
                 <form id="formUpl" method="post" enctype="multipart/form-data" style="display: none">
+                    <input type="hidden" name="token" id="token" value="<?echo $_SESSION['token']?>">
                     <input type="hidden" name="max_file_size" value="1048576">
                     <input id="filter-id2" type="hidden" name="filterId2" value="0">
                     <input type="file" id="input-file" name="file-to-upload" accept="image/jpeg, image/png">
