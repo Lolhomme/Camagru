@@ -4,36 +4,37 @@ require_once ("dbConnect.php");
 session_start();
 
 $errors = array();
+if (isset($_SESSION['user'])){
+    header('location: index.php');
+}
+else {
+    if (!empty($_POST)) {
 
-if (!empty($_POST))
-{
+        if (empty($_POST['username']) || empty($_POST['password']))
+            $errors['emptyField'] = true;
+        if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45)
+            $errors['invalidUsernameForm'] = true;
+        if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
+            $errors['invalidPasswordForm'] = true;
 
-    if (empty($_POST['username']) || empty($_POST['password']))
-        $errors['emptyField'] = true;
-    if (strlen($_POST['username']) < 5 || strlen($_POST['username']) > 45)
-        $errors['invalidUsernameForm'] = true;
-    if (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 255)
-        $errors['invalidPasswordForm'] = true;
+        /*Get all user info*/
+        $username = trim(htmlspecialchars($_POST['username']));
+        $req = $db->prepare("select * from users where username=:username");
+        $req->bindValue(':username', $username);
+        if ($req->execute() && $row = $req->fetch())
+            $user = $row;
 
-    /*Get all user info*/
-    $username = trim(htmlspecialchars($_POST['username']));
-    $req = $db->prepare("select * from users where username=:username");
-    $req->bindValue(':username', $username);
-    if ($req->execute() && $row = $req->fetch())
-    $user = $row;
+        if (empty($errors)) {
 
-    if (empty($errors))
-    {
+            /*Check all*/
+            $password = hash("sha256", $_POST['password'] . $row['salt']);
+            if ($password != $user['password'])
 
-        /*Check all*/
-        $password = hash("sha256", $_POST['password'].$row['salt']);
-        if ($password != $user['password'])
-
-            $errors['invalidLog'] = true;
-        else
-        {
-            $_SESSION['user'] = $user;
-            header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php');
+                $errors['invalidLog'] = true;
+            else {
+                $_SESSION['user'] = $user;
+                header('location:' . $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . '/index.php');
+            }
         }
     }
 }

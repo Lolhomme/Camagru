@@ -1,5 +1,5 @@
 <?php
-require_once("./includes/dbConnect.php");
+require_once("includes/dbConnect.php");
 
 $login = $_GET['log'];
 $confirmKey = $_GET['confirmKey'];
