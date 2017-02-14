@@ -57,3 +57,11 @@ button:hover{
     text-align: center;
     margin-top: 20px;
 }
+
+footer{
+    position: fixed;
+    bottom: 0px;
+    background-color: #0e84b5;
+    width: 100%;
+    text-align: center;
+}

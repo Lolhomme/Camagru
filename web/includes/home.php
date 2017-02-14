@@ -104,7 +104,7 @@ if (isset($_SESSION['user'])) {
     $req = $db->prepare('select count(id) from pictures');
     $req->execute();
     $row = $req->fetchColumn();
-    $nbrPerPage = 12;
+    $nbrPerPage = 6;
     $allPage = ceil($row / $nbrPerPage);
     if (isset($_GET['p']) && ($_GET['p'] > 0 && $_GET['p'] <= $allPage))
         $firstPage = $_GET['p'];
@@ -131,7 +131,7 @@ if (isset($_SESSION['user'])) {
 <div class="container">
     <h1>Camagru: Bienvenue ganache!</h1>
     <div class="row nav">
-        <div class="col-xs-12 col-sm-12">
+        <div class="col-xs-12">
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>
             <a id="gallery" href="../gallery.php">Gallerie</a>
         </div>
@@ -155,15 +155,16 @@ if (isset($_SESSION['user'])) {
         ?>
     </div>
     <div class="row display">
-        <div class="col-xs-12 col-sm-8 main">
-            <video id="video"></video>
-            <div id="previewCam" style="display: none">
-                <img src="#" id="photo" alt="photo" style="display: none">
-                <canvas id="canvas"></canvas>
+        <div class="col-xs-12 col-sm-12 col-md-9 main">
+            <div class="col-xs-12 camera">
+                <video id="video" style="width: 100%; height: auto"></video>
+                <div id="previewCam" style="display: none">
+                    <img src="#" id="photo" alt="photo" style="display: none">
+                    <canvas id="canvas" style="width: 100%; height: auto"></canvas>
+                </div>
+                <div id="preview" style="display: none; width: 100%; height: auto"></div>
             </div>
-            <div id="preview" style="display: none">
-            </div>
-            <div class="col-xs-12-nogutter col-sm-12-nogutter filters">
+            <div class="col-xs-12 filters">
                 <?php $i = 1;?>
                 <?php for (;$i <= 3; $i++):?>
                     <img src="../img/filters/<?=$i?>.png" id="filter<?=$i?>" alt="<?=$i?>" style="border: 1px solid transparent">
@@ -187,7 +188,7 @@ if (isset($_SESSION['user'])) {
                 </form>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-sm-push-4 side">
+        <div class="col-xs-12 col-sm-12 col-md-3 side">
             <?php if (!isset($photos))
                 echo "<h4>Aucune ganache de vous</h4>";
             else
@@ -206,6 +207,7 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
 </div>
+<div class="col-xs-12" style="height: 200px"></div>
 <script type="text/javascript" src="../js/takepicture.js"></script>
 </body>
 <footer>

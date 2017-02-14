@@ -63,11 +63,24 @@ button:hover{
 }
 
 .display .filters img{
-    width: 150px;
-    height: 150px;
+    width: auto;
+    height: auto;
     margin-right: 90px;
 }
 .side h4{
     color: white;
+    text-align: center;
+}
+
+#preview img{
+    width: 100%;
+    height: auto;
+}
+
+footer{
+    position: fixed;
+    bottom: 0px;
+    background-color: #0e84b5;
+    width: 100%;
     text-align: center;
 }
