@@ -32,6 +32,9 @@ else
     <link href="css/grid.css" type="text/css" rel="stylesheet">
     <link href="css/gallery.css" type="text/css" rel="stylesheet">
 </head>
+<header>
+    <h1>Camagru</h1>
+</header>
 <body>
 <div class="container">
     <h1>Galerie</h1>

@@ -46,9 +46,12 @@ else {
         <link rel="stylesheet" type="text/css" href="css/grid.css">
         <link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
+<header>
+    <h1>Camagru</h1>
+</header>
 <body>
 <div class="container">
-    <h1>Camagru</h1>
+    <h1>Coucou tu veux voir ma...</h1>
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-push-2 confirm-div">
                 <?php

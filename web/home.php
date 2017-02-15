@@ -128,9 +128,12 @@ if (isset($_SESSION['user'])) {
     <link href="css/grid.css" type="text/css" rel="stylesheet">
     <link href="css/home.css" type="text/css" rel="stylesheet">
 </head>
+<header>
+    <h1>Camagru</h1>
+</header>
 <body>
 <div class="container">
-    <h1>Camagru: Bienvenue ganache!</h1>
+    <h1>Bienvenue ganache!</h1>
     <div class="row nav">
         <div class="col-xs-12">
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>

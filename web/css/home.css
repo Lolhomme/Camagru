@@ -1,8 +1,15 @@
+header {
+    text-align: center;
+    color: #004C96;
+    font-family: "Courier New", Courier, mono;
+    top: 0;
+}
+
 body{
     background-color: lightsteelblue;
 }
 
-body h1{
+body .container h1{
     margin: 0 10px;
     color: #004C96;
     font-family: "Courier New", Courier, mono;

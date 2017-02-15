@@ -76,10 +76,13 @@ if (!empty($_POST)) {
     <link href="css/grid.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/sign-up.css">
 </head>
+<header>
+    <h1>Camagru</h1>
+</header>
 <body>
 <div class="container">
     <div class="row nav">
-        <a href="index.php">Camagru</a>
+        <a href="index.php">Accueil</a>
     </div>
     <div class="row confirm-div">
         <div class="col-xs-12 col-sm-8 col-sm-push-2 confirm-div">

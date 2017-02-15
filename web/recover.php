@@ -53,6 +53,9 @@ if (!empty($_POST)) {
     <link href="css/grid.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/forgot-recover.css">
 </head>
+<header>
+    <h1>Camagru</h1>
+</header>
 <body>
 <div class="container">
     <div class="row nav">
