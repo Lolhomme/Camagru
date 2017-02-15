@@ -119,6 +119,8 @@ if (isset($_SESSION['user'])) {
     if ($req->execute() && $row = $req->fetchAll())
         $photos = $row;
 }
+else
+    header('location: index.php');
 ?>
 <!DOCTYPE>
 <html>
@@ -206,7 +208,7 @@ if (isset($_SESSION['user'])) {
                     if ($i == $cPage)
                         echo "$i/";
                     else
-                        echo "<a href=\"index.php?p=$i\">$i</a>/";
+                        echo "<a href=\"home.php?p=$i\">$i</a>/";
                 }?>
         </div>
     </div>

@@ -72,10 +72,9 @@ if (isset($_SESSION['user'])) {
         else
             $errors['token'] = true;
     }
-
     if (!empty($_POST['delPic'])){
        if (check_token(1800, $_SERVER["REQUEST_SCHEME"] .'://' .$_SERVER["HTTP_HOST"].'/picture.php?id=' . $pictures_id)) { /*DELETE*/
-           if ($author['id'] = $users_id) {
+           if ($author['id'] == $users_id) {
                $req = $db->prepare("delete from pictures where id=:id");
                $req->bindValue(':id', $pictures_id);
                if ($req->execute()) {
