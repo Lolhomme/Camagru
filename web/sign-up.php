@@ -33,7 +33,7 @@ if (!empty($_POST)) {
     
     Pour activer votre compte veuillez cliquer sur le lien ci-dessous, ou le copier/coller dans votre navigateur.
      
-     '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/activation.php?log='.urldecode($username).'&confirmKey='.urldecode($confirmKey).'
+     '.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/includes/activation.php?log='.urldecode($username).'&confirmKey='.urldecode($confirmKey).'
      
      -----------------------
      Ceci est un email automatique, veuillez ne pas y répondre.';

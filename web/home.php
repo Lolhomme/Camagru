@@ -1,13 +1,13 @@
 <?php
-require ('dbConnect.php');
-require ('anti-csrf.php');
+require('includes/dbConnect.php');
+require('includes/anti-csrf.php');
 session_start();
 
 $errors = array();
 $token = create_token();
 if (isset($_SESSION['user'])) {
     if (!empty($_POST)) {
-        if (check_token(1800, 'http://localhost:8081/index.php')) {
+        if (check_token(1800, 'http://localhost:8081/home.php')) {
             if (empty($_POST['filterId']) && empty($_POST['filterId2']))
                 $errors['noFilter'] = true;
             if (empty($_FILES)) { /*Upload from webcam*/
@@ -101,7 +101,8 @@ if (isset($_SESSION['user'])) {
     }
 
     /*Pagination*/
-    $req = $db->prepare('select count(id) from pictures');
+    $req = $db->prepare('select count(id) from pictures where users_id=:users_id');
+    $req->bindValue('users_id', $_SESSION['user']['id']);
     $req->execute();
     $row = $req->fetchColumn();
     $nbrPerPage = 6;
@@ -124,8 +125,8 @@ if (isset($_SESSION['user'])) {
 <head>
     <meta charset="utf-8">
     <title>Camagru-Home</title>
-    <link href="../css/grid.css" type="text/css" rel="stylesheet">
-    <link href="../css/home.css" type="text/css" rel="stylesheet">
+    <link href="css/grid.css" type="text/css" rel="stylesheet">
+    <link href="css/home.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -133,7 +134,7 @@ if (isset($_SESSION['user'])) {
     <div class="row nav">
         <div class="col-xs-12">
             <a id="logout" href="./includes/logout.php">Se deconnecter</a>
-            <a id="gallery" href="../gallery.php">Gallerie</a>
+            <a id="gallery" href="gallery.php">Galerie</a>
         </div>
     </div>
     <div class="row" id="errors">
@@ -195,7 +196,7 @@ if (isset($_SESSION['user'])) {
                 echo "<h4>Vos ganaches</h4>";?>
             <?php if (is_array($photos))
                 foreach ($photos as $photo) : ?>
-            <a href="../picture.php?id=<?=$photo['id']?>">
+            <a href="picture.php?id=<?=$photo['id']?>">
                     <img id="last_photos" src="../img/uploads/<?php echo $photo['id']?>.png">
                 <?php endforeach; ?>
                 <?php for ($i=1;$i<=$allPage;$i++){
@@ -208,7 +209,7 @@ if (isset($_SESSION['user'])) {
     </div>
 </div>
 <div class="col-xs-12" style="height: 200px"></div>
-<script type="text/javascript" src="../js/takepicture.js"></script>
+<script type="text/javascript" src="js/takepicture.js"></script>
 </body>
 <footer>
     <h4><a target="_blank" href="https://github.com/Lolhomme">LAULOM Anthony</a></h4>

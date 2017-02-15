@@ -1,5 +1,5 @@
 <?php
-require_once("includes/dbConnect.php");
+require_once("dbConnect.php");
 
 $login = $_GET['log'];
 $confirmKey = $_GET['confirmKey'];
@@ -22,8 +22,8 @@ else
         $req->bindValue(':username', $login);
         $req->execute();
 
-        header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php?success=activation');
+        header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/login.php?success=activation');
     }
     else
-        echo 'ERROR';
+        header('location:' . $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . '/login.php?error=activation');
 ?>

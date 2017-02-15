@@ -22,7 +22,7 @@ if (!empty($_POST)) {
     $req->bindValue(':recover', $_GET['v']);
     $req->execute();
     if ($req->fetchColumn() == 0) {
-        header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php?error=invalid_link');
+        header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/login.php?error=invalid_link');
         die();
     }
 
@@ -38,7 +38,7 @@ if (!empty($_POST)) {
         $req->bindValue(':recover', $_GET['v']);
         if ($req->execute())
         {
-            header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/index.php?ok=passwordChange');
+            header('location:'.$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/login.php?ok=passwordChange');
             die();
         }
     }

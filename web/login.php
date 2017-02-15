@@ -1,6 +1,5 @@
 <?php
-
-require_once ("dbConnect.php");
+require_once("includes/dbConnect.php");
 session_start();
 
 $errors = array();
@@ -44,8 +43,8 @@ else {
 <head>
     <meta charset="utf-8">
     <title>Camagru</title>
-        <link rel="stylesheet" type="text/css" href="../css/grid.css">
-        <link rel="stylesheet" type="text/css" href="../css/login.css">
+        <link rel="stylesheet" type="text/css" href="css/grid.css">
+        <link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <body>
 <div class="container">
@@ -74,10 +73,10 @@ else {
                 <div class="col-xs-12" style="height: 20px;"></div>
                 <div class="col-xs-12 col-sm-4 col-sm-push-4">
                     <div class="link">
-                    <a href="../sign-up.php">Pas encore inscrit? Viendez ça va être bien.</a>
+                    <a href="sign-up.php">Pas encore inscrit? Viendez ça va être bien.</a>
                     </div>
                     <div class="link">
-                        <a href="../forgot.php">Mot de passe oublié?</a>
+                        <a href="forgot.php">Mot de passe oublié?</a>
                     </div>
                 </div>
             </div>

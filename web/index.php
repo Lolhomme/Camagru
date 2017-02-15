@@ -4,7 +4,7 @@ require("./includes/dbConnect.php");
 session_start();
 
 if (isset($_SESSION['user']))
-	include ("./includes/home.php");
+	header('location: home.php');
 else
-	include("./includes/login.php");
+	header('location: login.php');
 ?>

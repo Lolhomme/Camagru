@@ -1,5 +1,5 @@
 <?php
-include '../config/database.php';
+require '/Users/alaulom/http/MyWebSite/camagru/config/database.php';
 
 try {
     //42
