@@ -28,7 +28,7 @@ if (isset($_SESSION['user'])) {
     }
 
     if (!empty($_POST['picId'])) {
-        if (check_token(1800, 'http://localhost:8081/picture.php?id=' . $pictures_id)) {/*LIKE*/
+        if (check_token(1800, $_SERVER["REQUEST_SCHEME"] .'://' .$_SERVER["HTTP_HOST"].'/picture.php?id=' . $pictures_id)) {/*LIKE*/
             if (isset($isLiked)) { /*Unlike button*/
                 $req = $db->prepare("delete from .like where id=:id");
                 $req->bindValue(':id', $likeId);
@@ -45,7 +45,7 @@ if (isset($_SESSION['user'])) {
     }
 
     if (!empty($_POST['textCom']) && is_string($_POST['textCom'])) {
-        if (check_token(1800, 'http://localhost:8081/picture.php?id=' . $pictures_id)) { /*COMMENT*/
+        if (check_token(1800, $_SERVER["REQUEST_SCHEME"] .'://' .$_SERVER["HTTP_HOST"].'/picture.php?id=' . $pictures_id)) { /*COMMENT*/
             $content = $_POST['textCom'];
 
             /*Comment*/
@@ -74,7 +74,7 @@ if (isset($_SESSION['user'])) {
     }
 
     if (!empty($_POST['delPic'])){
-       if (check_token(1800, 'http://localhost:8081/picture.php?id='.$pictures_id)) { /*DELETE*/
+       if (check_token(1800, $_SERVER["REQUEST_SCHEME"] .'://' .$_SERVER["HTTP_HOST"].'/picture.php?id=' . $pictures_id)) { /*DELETE*/
            if ($author['id'] = $users_id) {
                $req = $db->prepare("delete from pictures where id=:id");
                $req->bindValue(':id', $pictures_id);

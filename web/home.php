@@ -7,7 +7,7 @@ $errors = array();
 $token = create_token();
 if (isset($_SESSION['user'])) {
     if (!empty($_POST)) {
-        if (check_token(1800, 'http://localhost:8081/home.php')) {
+        if (check_token(1800, $_SERVER["REQUEST_SCHEME"] .'://' .$_SERVER["HTTP_HOST"].'/home.php')) {
             if (empty($_POST['filterId']) && empty($_POST['filterId2']))
                 $errors['noFilter'] = true;
             if (empty($_FILES)) { /*Upload from webcam*/

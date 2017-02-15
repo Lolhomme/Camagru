@@ -33,6 +33,7 @@ body .container h1{
 }
 
 button{
+    margin-top: 10px;
     color: white;
     height: 30px;
     border-radius: 15px;
